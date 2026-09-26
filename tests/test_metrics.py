@@ -212,6 +212,15 @@ class RefreshTest(unittest.TestCase):
         self.assertEqual(self.conn.execute("SELECT d30 FROM snapshot WHERE entity_id = 1 AND taken_at = '2026-09-26'")
                          .fetchone()[0], 100)
 
+    def test_폴백_창보다_오래된_스냅샷만_있으면_None(self):
+        gh = FakeGH({1: raw_repo(1, "a/b", 500), 2: raw_repo(2, "c/d", 200)}, {1: HISTORY, 2: HISTORY})
+        metrics.refresh(self.conn, gh, CONFIG, datetime.date(2026, 5, 1))   # 148일 전 — d7·d30·d90 창 모두 밖
+        gh.repos[1] = raw_repo(1, "a/b", 600)
+        gh.histories[1] = GitHubError("x")
+        metrics.refresh(self.conn, gh, CONFIG, self.today)
+        snap = self.conn.execute("SELECT d7, d30, d90 FROM snapshot WHERE entity_id = 1 AND taken_at = '2026-09-26'").fetchone()
+        self.assertEqual((snap["d7"], snap["d30"], snap["d90"]), (None, None, None))
+
     def test_레포_조회가_오류면_그_레포만_건너뛰고_이전_범위를_유지한다(self):
         gh = FakeGH({1: raw_repo(1, "a/b", 5000), 2: raw_repo(2, "c/d", 5000)}, {1: HISTORY, 2: HISTORY})
         metrics.refresh(self.conn, gh, CONFIG, datetime.date(2026, 9, 19))

@@ -112,6 +112,12 @@ class CollectTest(unittest.TestCase):
         self.assertEqual(summary["entities"], 2)
         self.assertEqual(summary["by_source"]["search:topic:a"], 1)
 
+    def test_잘린_검색을_요약에_넘긴다(self):
+        gh = FakeGitHub()
+        gh.truncated = [("kw stars:100..199 created:2026-01-01..2026-12-31", 1400)]
+        self.assertEqual(collect.collect(self.conn, gh, CONFIG)["truncated"], gh.truncated)
+        self.assertEqual(collect.collect(self.conn, FakeGitHub(), CONFIG)["truncated"], [])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -204,6 +204,14 @@ class TriageFailureTest(Base):
         self.assertEqual(self.screening("triaged")[1][0], "error")
         self.assertEqual(self.screening("triaged")[2], ("include", None))
 
+    def test_묶음의_레포가_모두_GitHub_오류면_LLM을_부르지_않는다(self):
+        self.add(1)
+        self.add(2)
+        llm = FakeLLM(triage_all_include)
+        judge.triage(self.conn, FakeGH(broken={1: NotFound("x"), 2: GitHubError("x")}), CONFIG, llm_call=llm)
+        self.assertEqual(llm.prompts, [])
+        self.assertEqual({v[0] for v in self.screening("triaged").values()}, {"error"})
+
 
 class JudgeTest(Base):
     def test_레포_하나의_GitHub_오류는_그_레포만_error로_두고_계속한다(self):
