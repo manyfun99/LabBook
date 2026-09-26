@@ -10,14 +10,18 @@
 | 경로 | 역할 |
 |------|------|
 | `docs/ai-discussions/` | 계획·결정 기록 |
+| `labbook/` | 수집·판정 도구 (Python 표준 라이브러리). `python3 -m labbook <명령>` — collect·refresh·triage·judge·funnel·top·select·export·import. 스키마는 `labbook/migrations/` |
+| `topics/<주제>/` | 주제별 설정(`config.json`)·루브릭·골드셋·노트·아이디어·리포트·`index.md`·`log.md` |
+| `data/*.jsonl` | 조사 기록 이력 정본 (git 커밋). 작업 DB `labbook.db` 는 gitignore — `python3 -m labbook import` 로 재구성 |
+| `.claude/skills/labbook-*` | 이 레포의 조사 스킬 (심층분석·브레인스토밍·기록 조회) — 하네스(plan-*)와 별개로 이 레포에서 수정한다 |
 
 ## 빌드/테스트
 
-plan-execute·plan-verify 가 이 표를 참조한다. 아직 코드가 없다 — 아카이브 도구를 만들 때 채운다.
+plan-execute·plan-verify 가 이 표를 참조한다.
 
 | 대상 | 빌드 | 테스트 (영향 범위) | 테스트 (전체) |
 |------|------|------|------|
-| - | - | - | - |
+| `labbook/` | - | `python3 -m unittest tests.test_<모듈>` | `python3 -m unittest discover tests` |
 
 ## 개발 워크플로
 

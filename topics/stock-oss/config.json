@@ -1,0 +1,33 @@
+{
+  "topic": "stock-oss",
+  "min_stars": 100,
+  "kr_min_stars": 50,
+  "topic_queries": [
+    "topic:algorithmic-trading", "topic:quantitative-finance", "topic:stock-market", "topic:trading-bot",
+    "topic:backtesting", "topic:stock", "topic:trading", "topic:finance", "topic:fintech",
+    "topic:portfolio", "topic:investment"
+  ],
+  "keyword_queries": [
+    "\"llm trading\"", "\"ai hedge fund\"", "\"stock analysis\"", "\"trading agent\"", "\"financial agent\"",
+    "quant", "backtest", "\"stock mcp\"", "\"finance mcp\"", "\"trading skills\"", "\"prediction market\""
+  ],
+  "kr_queries": [
+    "topic:kospi", "pykrx", "FinanceDataReader", "OpenDartReader", "한국투자증권", "키움", "주식 자동매매",
+    "코스피 in:readme", "코스닥 in:readme", "\"한국 주식\" in:readme"
+  ],
+  "awesome_lists": [
+    "wilsonfreitas/awesome-quant", "georgezouq/awesome-ai-in-finance", "paperswithbacktest/awesome-systematic-trading",
+    "LLMQuant/awesome-trading-agents", "darjeeling/awesome-mcp-korea"
+  ],
+  "starred_user": "manyfun99",
+  "scope": {
+    "famous_stars": 1000,
+    "rising_d30": 300,
+    "rising_ratio": 0.2,
+    "rising_min_stars": 100,
+    "kr_min_stars": 50
+  },
+  "triage": {"model": "sonnet", "batch": 20, "readme_chars": 2000},
+  "judge": {"model": "opus", "readme_chars": 30000, "issues": 30},
+  "rubric_version": "v1"
+}

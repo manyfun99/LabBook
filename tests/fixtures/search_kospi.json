@@ -1,0 +1,86 @@
+{
+ "total_count": 3,
+ "incomplete_results": false,
+ "items": [
+  {
+   "id": 130222943,
+   "full_name": "FinanceData/FinanceDataReader",
+   "html_url": "https://github.com/FinanceData/FinanceDataReader",
+   "description": "Financial data reader",
+   "topics": [
+    "btc",
+    "financedata",
+    "financial-data-reader",
+    "kospi",
+    "krx",
+    "stock-price",
+    "stock-prices",
+    "symbol"
+   ],
+   "language": "Python",
+   "stargazers_count": 1545,
+   "forks_count": 406,
+   "watchers_count": 1545,
+   "open_issues_count": 54,
+   "pushed_at": "2026-05-13T19:12:11Z",
+   "created_at": "2018-04-19T13:51:59Z",
+   "archived": false,
+   "fork": false
+  },
+  {
+   "id": 296532199,
+   "full_name": "elbakramer/koapy",
+   "html_url": "https://github.com/elbakramer/koapy",
+   "description": "KOAPY 는 키움 OpenAPI 를 Python 에서 쉽게 사용할 수 있도록 만든 라이브러리 패키지 및 툴입니다.",
+   "topics": [
+    "backtrader",
+    "cybos-plus",
+    "grpc",
+    "kiwoom",
+    "kiwoom-open-api",
+    "kosdaq",
+    "kospi",
+    "krx",
+    "pyqt5",
+    "pyside2",
+    "python",
+    "system-trading",
+    "windows"
+   ],
+   "language": "Python",
+   "stargazers_count": 222,
+   "forks_count": 73,
+   "watchers_count": 222,
+   "open_issues_count": 13,
+   "pushed_at": "2023-02-11T02:04:58Z",
+   "created_at": "2020-09-18T06:22:05Z",
+   "archived": false,
+   "fork": false
+  },
+  {
+   "id": 62862398,
+   "full_name": "coreanq/kw_condition",
+   "html_url": "https://github.com/coreanq/kw_condition",
+   "description": "키움 증권 조건 검색식 사용 Console App",
+   "topics": [
+    "kiwoom",
+    "kiwoom-open-api",
+    "kosdaq",
+    "kospi",
+    "python3",
+    "stock",
+    "system-trading",
+    "trading"
+   ],
+   "language": "Python",
+   "stargazers_count": 63,
+   "forks_count": 50,
+   "watchers_count": 63,
+   "open_issues_count": 4,
+   "pushed_at": "2023-10-04T00:20:23Z",
+   "created_at": "2016-07-08T05:54:16Z",
+   "archived": false,
+   "fork": false
+  }
+ ]
+}
