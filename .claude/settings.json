@@ -1,0 +1,14 @@
+{
+  "extraKnownMarketplaces": {
+    "indie-forge": {
+      "source": {
+        "source": "github",
+        "repo": "manyfun99/indie-forge"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "forge@indie-forge": true,
+    "superpowers@superpowers-marketplace": false
+  }
+}
