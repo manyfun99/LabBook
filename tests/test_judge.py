@@ -280,11 +280,26 @@ class JudgeTest(Base):
 
         def spaced(prompt, attempt):
             out = full_ok(prompt, attempt)
-            out["evidence"] = {"P": "line one line two", "I": "Korean market support?", "N": "설명 1", "T": "line"}
+            out["evidence"] = {"P": "line one line two", "I": "Korean market support?", "N": "이름: o/r1", "T": "line two"}
             return out
 
         judge.judge(self.conn, gh, CONFIG, self.topic_dir, llm_call=FakeLLM(spaced))
         self.assertEqual(self.screening("judged")[1][0], "include")
+
+    def test_공백뿐이거나_너무_짧은_인용은_거부한다(self):
+        self.add(1, triaged="include")
+        self.add(2, triaged="include")
+
+        def short(q):
+            def responder(prompt, attempt):
+                out = full_ok(prompt, attempt)
+                out["evidence"]["P"] = q
+                return out
+            return responder
+
+        judge.judge(self.conn, FakeGH(), CONFIG, self.topic_dir, llm_call=FakeLLM(short(" \n ")), limit=1)
+        judge.judge(self.conn, FakeGH(), CONFIG, self.topic_dir, llm_call=FakeLLM(short("None")))
+        self.assertEqual({k: v[0] for k, v in self.screening("judged").items()}, {1: "error", 2: "error"})
 
     def test_README가_길면_자르고_잘린_뒤의_인용은_거부한다(self):
         self.add(1, triaged="include")

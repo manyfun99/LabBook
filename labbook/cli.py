@@ -64,7 +64,8 @@ def main(argv=None):
         detail = _processed(judge.triage(conn, gh, config, limit=args.limit))
     elif args.cmd == "judge" and args.gold:
         out = judge.gold(gh, config, topic_dir)
-        detail = f"골드 일치율 {out['overall']:.0%} → reports/gold-{config['rubric_version']}.md"
+        rate = "전부 판정 실패" if out["overall"] is None else f"{out['overall']:.0%}"
+        detail = f"골드 일치율 {rate} → reports/gold-{config['rubric_version']}.md"
     elif args.cmd == "judge":
         detail = _processed(judge.judge(conn, gh, config, topic_dir, limit=args.limit))
     elif args.cmd == "funnel":

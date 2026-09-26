@@ -17,6 +17,7 @@ from urllib.parse import quote
 SEARCH_CAP = 1000  # 검색 API 가 한 쿼리에 돌려주는 최대 건수
 README_MAX_AGE_DAYS = 7
 BACKOFFS = (1, 2, 4)
+MAX_RATE_WAITS = 10  # 레이트리밋 대기 상한 — 리셋 시각이 계속 과거로 오는 경우 등 끝없는 재시도를 막는다
 STAR_BOUNDS = (50, 100, 200, 500, 1000, 5000)
 NOT_REPO_OWNERS = {"topics", "sponsors", "orgs", "features", "marketplace", "apps", "settings",
                    "about", "collections", "trending", "site", "login", "join", "explore", "search"}
@@ -81,7 +82,7 @@ class GitHub:
         self.truncated = []  # 연도로 나눠도 1000건을 넘어 잘린 검색 (쿼리, total_count)
 
     def get(self, path):
-        failures = 0
+        failures = rate_waits = 0
         while True:
             try:
                 proc = self.runner(["gh", "api", "-i", path], capture_output=True, text=True, timeout=self.timeout)
@@ -95,7 +96,10 @@ class GitHub:
                 raise NotFound(path)
             wait = self._rate_limit_wait(status, headers)
             if wait is not None:
+                if rate_waits == MAX_RATE_WAITS:
+                    raise GitHubError(f"{path}: 레이트리밋 대기 {rate_waits}회 후에도 제한 (HTTP {status})")
                 self.sleep(wait)
+                rate_waits += 1
                 continue
             if status == 0 or status >= 500:
                 if failures == len(BACKOFFS):

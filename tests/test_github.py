@@ -68,6 +68,13 @@ class RequestTest(unittest.TestCase):
         gh.get("p")
         self.assertEqual(sleeps, [7])
 
+    def test_레이트리밋이_계속되면_10번_기다린_뒤_실패한다(self):
+        limited = http(429, {}, {"Retry-After": "1"})
+        gh, sleeps = make(FakeRunner({"p": [limited] * 11}))
+        with self.assertRaises(github.GitHubError):
+            gh.get("p")
+        self.assertEqual(len(sleeps), 10)
+
     def test_권한_403은_재시도하지_않고_실패한다(self):
         gh, sleeps = make(FakeRunner({"p": [http(403, {"message": "Forbidden"}, {"X-Ratelimit-Remaining": "4000"})]}))
         with self.assertRaises(github.GitHubError):

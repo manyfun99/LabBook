@@ -95,7 +95,7 @@ def _take_snapshot(conn, gh, row, today):
     try:
         days = daily_counts(gh.get(f"repositories/{row['gh_id']}/stargazers/history") or [], today)
         d7, d30, d90 = momentum(days)
-    except (NotFound, GitHubError):
+    except GitHubError:  # NotFound(404) 포함
         # 계획 §7.1 폴백 — 이전 스냅샷과의 스타 수 차이. 비교할 스냅샷이 없으면 None (범위 컷은 ★ 기준만)
         days = []
         d7, d30, d90 = (_delta_from_snapshots(conn, row["id"], today, repo["stars"], n) for n in (7, 30, 90))
