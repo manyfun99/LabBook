@@ -7,7 +7,7 @@ import json
 import re
 
 from labbook import llm
-from labbook.db import utc_now
+from labbook.db import set_screening, utc_now
 from labbook.github import GitHubError, normalize_repo
 
 CATEGORIES = ["llm-agent", "auto-trading", "foundation-model", "backtest-quant", "data-mcp", "broker-api",
@@ -109,7 +109,7 @@ def _triage_batch(conn, gh, config, rows, llm_call):
             readme, sha = gh.readme(meta["full_name"])
         except GitHubError as e:  # NotFound 포함 — 이 레포만 error 로 두고 다음 실행에 다시 시도
             with conn:
-                _set_screening(conn, topic, row["id"], "triaged", "error", f"github: {e}"[:200])
+                set_screening(conn, topic, row["id"], "triaged", "error", f"github: {e}"[:200])
             continue
         key = f"github:{meta['full_name'].lower()}"
         items[key] = {"entity_id": row["id"], "meta": meta, "sha": sha,
@@ -124,16 +124,16 @@ def _triage_batch(conn, gh, config, rows, llm_call):
             out, model = llm_call(prompt, TRIAGE_SCHEMA, cfg["model"])
         except llm.LLMError as e:
             for v in items.values():
-                _set_screening(conn, topic, v["entity_id"], "triaged", "error", str(e)[:200])
+                set_screening(conn, topic, v["entity_id"], "triaged", "error", str(e)[:200])
             return
         answered = {r["key"]: r for r in out["repos"] if r["key"] in items}
         for key, v in items.items():
             r = answered.get(key)
             if r is None:
-                _set_screening(conn, topic, v["entity_id"], "triaged", "error", "missing_in_response")
+                set_screening(conn, topic, v["entity_id"], "triaged", "error", "missing_in_response")
                 continue
             reason = r["exclude_reason"] if r["relevance"] == "exclude" else None
-            _set_screening(conn, topic, v["entity_id"], "triaged", r["relevance"], reason)
+            set_screening(conn, topic, v["entity_id"], "triaged", r["relevance"], reason)
             evidence = {"injection_suspect": r["injection_suspect"], "binary_link": v["binary_link"]}
             conn.execute(
                 "INSERT INTO judgment (topic, entity_id, stage, rubric_version, model, input_sha, category, market, "
@@ -160,7 +160,7 @@ def judge(conn, gh, config, topic_dir, *, llm_call=llm.run_claude, limit=None):
                 meta = normalize_repo(gh.get(f"repositories/{row['gh_id']}"))
                 out, model, sha, truncated = _judge_one(gh, config, rubric, meta, llm_call)
             except (llm.LLMError, GitHubError) as e:  # 이 레포만 error — 다음 실행에 다시 시도
-                _set_screening(conn, topic, row["id"], "judged", "error", str(e)[:200])
+                set_screening(conn, topic, row["id"], "judged", "error", str(e)[:200])
                 continue
             evidence = out["evidence"] | {"injection_suspect": out["injection_suspect"], "truncated": truncated}
             conn.execute(
@@ -168,7 +168,7 @@ def judge(conn, gh, config, topic_dir, *, llm_call=llm.run_claude, limit=None):
                 "summary_ko, scores, evidence, judged_at) VALUES (?, ?, 'full', ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (topic, row["id"], config["rubric_version"], model, sha, out["category"], out["market"],
                  out["summary_ko"], json.dumps(out["scores"]), json.dumps(evidence, ensure_ascii=False), utc_now()))
-            _set_screening(conn, topic, row["id"], "judged", "include", None)
+            set_screening(conn, topic, row["id"], "judged", "include", None)
     return len(pending)
 
 
@@ -247,11 +247,3 @@ def _rubric(config, topic_dir):
 
 def _norm(text):
     return re.sub(r"\s+", " ", text).strip()
-
-
-def _set_screening(conn, topic, entity_id, stage, decision, reason):
-    conn.execute(
-        "INSERT INTO screening (topic, entity_id, stage, decision, reason, decided_at) VALUES (?, ?, ?, ?, ?, ?) "
-        "ON CONFLICT (topic, entity_id, stage) DO UPDATE SET decision = excluded.decision, reason = excluded.reason, "
-        "decided_at = excluded.decided_at",
-        (topic, entity_id, stage, decision, reason, utc_now()))

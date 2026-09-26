@@ -56,5 +56,38 @@ class MigrateTest(unittest.TestCase):
         self.assertEqual(self.conn.execute("SELECT COUNT(*) FROM schema_version").fetchone()[0], 0)
 
 
+
+class SetScreeningTest(unittest.TestCase):
+    def setUp(self):
+        self.conn = db.connect(":memory:")
+        self.addCleanup(self.conn.close)
+        db.migrate(self.conn)
+        self.conn.execute("INSERT INTO entity (kind, key, gh_id, first_seen_at) VALUES ('github_repo', 'github:a/b', 1, 't')")
+
+    def row(self, stage):
+        return self.conn.execute("SELECT * FROM screening WHERE topic = 't' AND entity_id = 1 AND stage = ?",
+                                 (stage,)).fetchone()
+
+    def test_없으면_넣는다(self):
+        db.set_screening(self.conn, "t", 1, "triaged", "error", "missing_in_response")
+        r = self.row("triaged")
+        self.assertEqual((r["decision"], r["reason"]), ("error", "missing_in_response"))
+        self.assertIsNotNone(r["decided_at"])
+
+    def test_있으면_판정_사유_시각을_덮어쓰고_sources는_보존한다(self):
+        self.conn.execute("INSERT INTO screening (topic, entity_id, stage, decision, reason, sources, decided_at) "
+                          "VALUES ('t', 1, 'scoped', 'exclude', 'below_threshold', '[\"star\"]', 'old')")
+        db.set_screening(self.conn, "t", 1, "scoped", "include", None)
+        r = self.row("scoped")
+        self.assertEqual((r["decision"], r["reason"], r["sources"]), ("include", None, '["star"]'))
+        self.assertNotEqual(r["decided_at"], "old")
+        self.assertEqual(self.conn.execute("SELECT COUNT(*) FROM screening").fetchone()[0], 1)
+
+    def test_다른_단계는_건드리지_않는다(self):
+        db.set_screening(self.conn, "t", 1, "scoped", "include", "famous")
+        db.set_screening(self.conn, "t", 1, "triaged", "exclude", "unrelated")
+        self.assertEqual(self.row("scoped")["reason"], "famous")
+
+
 if __name__ == "__main__":
     unittest.main()
