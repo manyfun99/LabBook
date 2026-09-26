@@ -134,5 +134,45 @@ class FunnelTest(Base):
         self.assertIn("심층분석 2", text)
 
 
+
+class SuspectsTest(Base):
+    def included(self):
+        return {r[0] for r in self.conn.execute(
+            "SELECT entity_id FROM screening WHERE topic = 't' AND stage = 'scoped' AND decision = 'include'")}
+
+    def test_1단_판정의_바이너리_링크도_의심으로_센다(self):
+        eid = self.seed.repo(1)
+        self.conn.execute("INSERT INTO judgment (topic, entity_id, stage, rubric_version, model, evidence, judged_at) "
+                          "VALUES ('t', ?, 'triage', 'v1', 'm', ?, 't')",
+                          (eid, json.dumps({"injection_suspect": False, "binary_link": True})))
+        self.seed.repo(2)
+        self.assertEqual(report._suspects(self.conn, "t", self.included()), 1)
+
+    def test_플래그는_최신_스냅샷만_본다(self):
+        eid = self.seed.repo(1)   # 최신(2026-09-26) 스냅샷 플래그 없음
+        self.conn.execute("INSERT INTO snapshot (entity_id, taken_at, stars, flags) VALUES (?, '2026-09-19', 1000, ?)",
+                          (eid, json.dumps(["spike"])))
+        self.assertEqual(report._suspects(self.conn, "t", self.included()), 0)
+
+    def test_범위_밖_레포와_플래그가_NULL인_스냅샷은_세지_않는다(self):
+        self.seed.repo(1, scoped=("exclude", "below_threshold"), flags=("spike",))
+        eid = self.seed.repo(2)
+        self.conn.execute("UPDATE snapshot SET flags = NULL WHERE entity_id = ?", (eid,))
+        self.assertEqual(report._suspects(self.conn, "t", self.included()), 0)
+
+    def test_쿼리_수는_레포_수와_무관하다(self):
+        def statements():
+            n = []
+            self.conn.set_trace_callback(n.append)
+            report._suspects(self.conn, "t", self.included())
+            self.conn.set_trace_callback(None)
+            return len(n)
+
+        self.seed.repo(1, scores=(1, 1, 1, 1))
+        one = statements()
+        for i in range(2, 21):
+            self.seed.repo(i, scores=(1, 1, 1, 1))
+        self.assertEqual(statements(), one)
+
 if __name__ == "__main__":
     unittest.main()
