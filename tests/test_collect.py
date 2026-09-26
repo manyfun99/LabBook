@@ -41,6 +41,7 @@ CONFIG = {"topic": "t", "min_stars": 100, "kr_min_stars": 50,
 class CollectTest(unittest.TestCase):
     def setUp(self):
         self.conn = db.connect(":memory:")
+        self.addCleanup(self.conn.close)
         db.migrate(self.conn)
 
     def entities(self):

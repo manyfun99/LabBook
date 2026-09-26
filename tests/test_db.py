@@ -7,6 +7,7 @@ from labbook import db
 class MigrateTest(unittest.TestCase):
     def setUp(self):
         self.conn = db.connect(":memory:")
+        self.addCleanup(self.conn.close)
 
     def test_빈_DB에_마이그레이션을_적용하면_테이블과_뷰가_생긴다(self):
         applied = db.migrate(self.conn)

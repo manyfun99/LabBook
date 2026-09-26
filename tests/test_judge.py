@@ -74,6 +74,7 @@ def full_ok(prompt, attempt):
 class Base(unittest.TestCase):
     def setUp(self):
         self.conn = db.connect(":memory:")
+        self.addCleanup(self.conn.close)
         db.migrate(self.conn)
         self.tmp = tempfile.TemporaryDirectory()
         self.topic_dir = Path(self.tmp.name)

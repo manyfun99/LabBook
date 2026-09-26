@@ -112,6 +112,7 @@ def raw_repo(gh_id, full_name, stars, watchers=100, forks=100, archived=False):
 class RefreshTest(unittest.TestCase):
     def setUp(self):
         self.conn = db.connect(":memory:")
+        self.addCleanup(self.conn.close)
         db.migrate(self.conn)
         for gh_id, key, sources in [(1, "github:a/b", ["search:x"]), (2, "github:c/d", ["search:x"])]:
             cur = self.conn.execute("INSERT INTO entity (kind, key, gh_id, first_seen_at) VALUES ('github_repo', ?, ?, 't')",
