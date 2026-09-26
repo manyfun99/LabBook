@@ -1,9 +1,10 @@
 import json
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
 
-from labbook import db, judge
+from labbook import db, judge, llm
 from labbook.github import GitHubError, NotFound
 from labbook.llm import LLMError
 
@@ -40,27 +41,31 @@ class FakeGH:
 
 
 class FakeLLM:
-    """run_claude 대역 — 응답을 순서대로 내고, 실제처럼 validate 실패 시 한 번 더 시도한다."""
+    """실제 run_claude 에 가짜 claude 프로세스를 물린다 — 재시도·검증·모델 ID 규칙은 llm.py 것을 그대로 탄다.
+
+    responder(prompt, attempt) 가 구조화 출력을 돌려주면 성공 응답, 예외를 돌려주면 비정상 종료로 흉내 낸다.
+    """
 
     def __init__(self, responder):
         self.responder = responder
-        self.prompts = []
+        self.prompts = []   # llm_call 단위 (재시도는 세지 않는다)
+        self.runs = 0       # 프로세스 호출 단위
 
     def __call__(self, prompt, schema, model, *, validate=None):
         self.prompts.append((prompt, model))
-        last = None
-        for attempt in range(2):
-            out = self.responder(prompt, attempt)
+        attempts = iter(range(llm.ATTEMPTS))
+
+        def runner(args, *, input, **kwargs):
+            self.runs += 1
+            out = self.responder(input, next(attempts))
             if isinstance(out, Exception):
-                last = out
-                continue
-            try:
-                if validate:
-                    validate(out)
-                return out, f"model-{model}"
-            except ValueError as e:
-                last = e
-        raise LLMError(str(last))
+                return subprocess.CompletedProcess(args, 1, stdout="", stderr=str(out))
+            body = {"is_error": False, "structured_output": out,
+                    "modelUsage": {f"model-{model}": {"outputTokens": 1}}}
+            return subprocess.CompletedProcess(args, 0, stdout=json.dumps(body), stderr="")
+
+        return llm.run_claude(prompt, schema, model, validate=validate, runner=runner,
+                              cwd=Path(tempfile.gettempdir()))  # 이미 있는 디렉터리 — mkdir 부작용 없음
 
 
 def triage_all_include(prompt, attempt):
@@ -276,7 +281,9 @@ class JudgeTest(Base):
             out["evidence"]["N"] = "입력에 없는 문장"
             return out
 
-        judge.judge(self.conn, FakeGH(), CONFIG, self.topic_dir, llm_call=FakeLLM(fabricated))
+        llm_call = FakeLLM(fabricated)
+        judge.judge(self.conn, FakeGH(), CONFIG, self.topic_dir, llm_call=llm_call)
+        self.assertEqual(llm_call.runs, llm.ATTEMPTS)
         self.assertEqual(self.screening("judged")[1][0], "error")
         self.assertEqual(self.conn.execute("SELECT COUNT(*) FROM judgment").fetchone()[0], 0)
         judge.judge(self.conn, FakeGH(), CONFIG, self.topic_dir, llm_call=FakeLLM(full_ok))
