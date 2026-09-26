@@ -8,7 +8,7 @@ import re
 
 from labbook import llm
 from labbook.db import utc_now
-from labbook.github import normalize_repo
+from labbook.github import GitHubError, NotFound, normalize_repo
 
 CATEGORIES = ["llm-agent", "auto-trading", "foundation-model", "backtest-quant", "data-mcp", "broker-api",
               "portfolio-pf", "dashboard", "research-screener", "crypto-bot", "prediction-market", "agent-skill", "other"]
@@ -74,10 +74,7 @@ summary_ko 는 한국어 3줄 이내.
 {rubric}
 </rubric>
 
-이름: {full_name}
-설명: {description}
-토픽: {topics}
-언어: {language}
+{meta}
 <readme{truncated}>
 {readme}
 </readme>
@@ -106,15 +103,20 @@ def _triage_batch(conn, gh, config, rows, llm_call):
     topic, cfg = config["topic"], config["triage"]
     items = {}
     for row in rows:
-        meta = normalize_repo(gh.get(f"repositories/{row['gh_id']}"))
-        readme, sha = gh.readme(meta["full_name"])
+        try:
+            meta = normalize_repo(gh.get(f"repositories/{row['gh_id']}"))
+            readme, sha = gh.readme(meta["full_name"])
+        except GitHubError as e:  # NotFound 포함 — 이 레포만 error 로 두고 다음 실행에 다시 시도
+            with conn:
+                _set_screening(conn, topic, row["id"], "triaged", "error", f"github: {e}"[:200])
+            continue
         key = f"github:{meta['full_name'].lower()}"
         items[key] = {"entity_id": row["id"], "meta": meta, "sha": sha,
                       "binary_link": bool(BINARY_LINK.search(readme)), "readme": readme[:cfg["readme_chars"]]}
-    blocks = "\n\n".join(
-        f'<repo key="{k}">\n이름: {v["meta"]["full_name"]}\n설명: {v["meta"]["description"]}\n'
-        f'토픽: {", ".join(v["meta"]["topics"])}\n언어: {v["meta"]["language"]}\n<readme>{v["readme"]}</readme>\n</repo>'
-        for k, v in items.items())
+    if not items:
+        return
+    blocks = "\n\n".join(f'<repo key="{k}">\n{_meta_text(v["meta"])}\n<readme>{v["readme"]}</readme>\n</repo>'
+                           for k, v in items.items())
     prompt = TRIAGE_PROMPT.format(boundary=BOUNDARY, repos=blocks)
     with conn:
         try:
@@ -145,17 +147,18 @@ def judge(conn, gh, config, topic_dir, *, llm_call=llm.run_claude, limit=None):
     rubric = _rubric(config, topic_dir)
     pending = conn.execute(
         "SELECT e.id, e.gh_id FROM screening tr JOIN entity e ON e.id = tr.entity_id "
+        "JOIN screening sc ON sc.entity_id = e.id AND sc.topic = tr.topic AND sc.stage = 'scoped' AND sc.decision = 'include' "
         "LEFT JOIN judgment j ON j.entity_id = e.id AND j.topic = tr.topic AND j.stage = 'full' "
         "WHERE tr.topic = ? AND tr.stage = 'triaged' AND tr.decision IN ('include', 'unsure') AND j.id IS NULL "
         "ORDER BY e.id", (topic,)).fetchall()
     if limit is not None:
         pending = pending[:limit]
     for row in pending:
-        meta = normalize_repo(gh.get(f"repositories/{row['gh_id']}"))
         with conn:  # 레포 단위 커밋 — 중단해도 끝난 것만 남는다
             try:
+                meta = normalize_repo(gh.get(f"repositories/{row['gh_id']}"))
                 out, model, sha, truncated = _judge_one(gh, config, rubric, meta, llm_call)
-            except llm.LLMError as e:
+            except (llm.LLMError, GitHubError) as e:  # 이 레포만 error — 다음 실행에 다시 시도
                 _set_screening(conn, topic, row["id"], "judged", "error", str(e)[:200])
                 continue
             evidence = out["evidence"] | {"injection_suspect": out["injection_suspect"], "truncated": truncated}
@@ -175,12 +178,10 @@ def _judge_one(gh, config, rubric, meta, llm_call):
     readme = readme[:cfg["readme_chars"]]
     issues = gh.top_issues(meta["full_name"], limit=cfg["issues"])
     issue_text = "\n".join(f"- {i['title']} (댓글 {i['comments']})" for i in issues)
-    prompt = FULL_PROMPT.format(
-        boundary=BOUNDARY, rubric=rubric, full_name=meta["full_name"], description=meta["description"],
-        topics=", ".join(meta["topics"]), language=meta["language"],
-        truncated=' truncated="true"' if truncated else "", readme=readme, issues=issue_text)
-    haystack = _norm("\n".join([meta["full_name"], meta["description"] or "", " ".join(meta["topics"]),
-                                readme, issue_text]))
+    meta_text = _meta_text(meta)
+    prompt = FULL_PROMPT.format(boundary=BOUNDARY, rubric=rubric, meta=meta_text,
+                                truncated=' truncated="true"' if truncated else "", readme=readme, issues=issue_text)
+    haystack = _norm("\n".join([meta_text, readme, issue_text]))  # 프롬프트에 보인 그대로 — 인용 가능한 범위와 같게
 
     def check_quotes(out):
         bad = [a for a in AXES if _norm(out["evidence"][a]) not in haystack]
@@ -195,23 +196,31 @@ def gold(gh, config, topic_dir, *, llm_call=llm.run_claude):
     """골드셋만 판정해 사용자 점수와 비교한다. DB 에 쓰지 않는다 — 루브릭 확정 후 전수 judge 에서 정식 판정된다."""
     rubric = _rubric(config, topic_dir)
     entries = [json.loads(line) for line in (topic_dir / "gold.jsonl").read_text().splitlines() if line.strip()]
-    rows, hits = [], {a: 0 for a in AXES}
+    if not entries:
+        raise ValueError("gold.jsonl 이 비어 있다 — 계획 §3.1-D 형식으로 채점한 레포를 먼저 적는다")
+    rows, failed, hits = [], [], {a: 0 for a in AXES}
     for g in entries:
-        out, model, _, _ = _judge_one(gh, config, rubric, gh.repo(g["repo"]), llm_call)
+        try:
+            out, model, _, _ = _judge_one(gh, config, rubric, gh.repo(g["repo"]), llm_call)
+        except (llm.LLMError, GitHubError):  # 이 레포만 빼고 계속 — 리포트에 실패로 적는다
+            failed.append(g["repo"])
+            continue
         diffs = {a: out["scores"][a] - g[a] for a in AXES}
         for a in AXES:
             hits[a] += abs(diffs[a]) <= 1
         rows.append((g, out, diffs))
-    n = len(entries)
-    agreement = {a: hits[a] / n for a in AXES}
-    overall = sum(hits.values()) / (n * len(AXES))
-    _write_gold_report(topic_dir, config["rubric_version"], rows, agreement, overall)
-    return {"agreement": agreement, "overall": overall}
+    n = len(rows)
+    agreement = {a: (hits[a] / n if n else None) for a in AXES}
+    overall = sum(hits.values()) / (n * len(AXES)) if n else None
+    _write_gold_report(topic_dir, config["rubric_version"], rows, agreement, overall, failed)
+    return {"agreement": agreement, "overall": overall, "failed": failed}
 
 
-def _write_gold_report(topic_dir, version, rows, agreement, overall):
+def _write_gold_report(topic_dir, version, rows, agreement, overall, failed):
+    pct = lambda v: "-" if v is None else f"{v:.0%}"  # noqa: E731
     lines = [f"# 골드셋 비교 — rubric {version} ({datetime.date.today().isoformat()})", "",
-             f"축별 ±1 이내 일치율: " + " · ".join(f"{a} {agreement[a]:.0%}" for a in AXES) + f" · 전체 {overall:.0%}",
+             f"축별 ±1 이내 일치율: " + " · ".join(f"{a} {pct(agreement[a])}" for a in AXES) + f" · 전체 {pct(overall)}",
+             *([f"판정 실패: {', '.join(failed)} (일치율 계산에서 뺌)"] if failed else []),
              "", "| 레포 | " + " | ".join(f"{a} (LLM/나)" for a in AXES) + " | 내 메모 |",
              "|---|" + "---|" * (len(AXES) + 1)]
     for g, out, diffs in rows:
@@ -223,6 +232,11 @@ def _write_gold_report(topic_dir, version, rows, agreement, overall):
     path = topic_dir / "reports" / f"gold-{version}.md"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(lines) + "\n")
+
+
+def _meta_text(meta):
+    return (f"이름: {meta['full_name']}\n설명: {meta['description']}\n"
+            f"토픽: {', '.join(meta['topics'])}\n언어: {meta['language']}")
 
 
 def _rubric(config, topic_dir):

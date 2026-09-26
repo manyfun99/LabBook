@@ -43,6 +43,10 @@ class FlagTest(unittest.TestCase):
         days30 = [0] * 10 + [30, 30, 20] + [1] * 17
         self.assertIn("spike", metrics.flags({"stars": 1000, "watchers": 50, "forks": 100}, days30))
 
+    def test_30일_증가가_정확히_30이면_급등을_본다(self):
+        self.assertIn("spike", metrics.flags({"stars": 1000, "watchers": 50, "forks": 100}, [21, 0, 0] + [0] * 17 + [9] + [0] * 9))
+        self.assertNotIn("spike", metrics.flags({"stars": 1000, "watchers": 50, "forks": 100}, [20, 0, 0] + [0] * 17 + [9] + [0] * 9))
+
     def test_고르게_늘면_급등이_아니다(self):
         self.assertNotIn("spike", metrics.flags({"stars": 1000, "watchers": 50, "forks": 100}, [10] * 30))
 
@@ -103,6 +107,8 @@ class FakeGH:
             return h
         if gh_id not in self.repos:
             raise NotFound(path)
+        if isinstance(self.repos[gh_id], Exception):
+            raise self.repos[gh_id]
         return self.repos[gh_id]
 
 
@@ -135,8 +141,8 @@ class RefreshTest(unittest.TestCase):
         snap = self.conn.execute("SELECT * FROM snapshot WHERE entity_id = 1").fetchone()
         self.assertEqual(snap["taken_at"], "2026-09-26")
         self.assertEqual(snap["stars"], 5000)
-        days = metrics.daily_counts(HISTORY, self.today)
-        self.assertEqual((snap["d7"], snap["d30"], snap["d90"]), metrics.momentum(days))
+        # 픽스처를 날짜별로 따로 정렬해 계산한 값 (2026-09-26 기준)
+        self.assertEqual((snap["d7"], snap["d30"], snap["d90"]), (2, 42, 115))
         self.assertEqual(self.scoped()["github:a/b"], ("include", "famous"))
 
     def test_같은_날_재실행하면_API를_부르지_않고_범위_컷만_다시_계산한다(self):
@@ -195,6 +201,25 @@ class RefreshTest(unittest.TestCase):
         snap = self.conn.execute("SELECT d30 FROM snapshot WHERE entity_id = 2").fetchone()
         self.assertIsNone(snap["d30"])
         self.assertEqual(self.scoped(), {"github:a/b": ("include", "famous"), "github:c/d": ("exclude", "below_threshold")})
+
+    def test_폴백_창은_N일부터_N_7일_전까지다(self):
+        gh = FakeGH({1: raw_repo(1, "a/b", 500), 2: raw_repo(2, "c/d", 200)}, {1: HISTORY, 2: HISTORY})
+        metrics.refresh(self.conn, gh, CONFIG, datetime.date(2026, 8, 20))   # 37일 전 = 30 + 7 (창 안)
+        metrics.refresh(self.conn, gh, CONFIG, datetime.date(2026, 7, 19))   # 69일 전 — d30 창 밖
+        gh.repos[1] = raw_repo(1, "a/b", 600)
+        gh.histories[1] = GitHubError("x")
+        metrics.refresh(self.conn, gh, CONFIG, self.today)
+        self.assertEqual(self.conn.execute("SELECT d30 FROM snapshot WHERE entity_id = 1 AND taken_at = '2026-09-26'")
+                         .fetchone()[0], 100)
+
+    def test_레포_조회가_오류면_그_레포만_건너뛰고_이전_범위를_유지한다(self):
+        gh = FakeGH({1: raw_repo(1, "a/b", 5000), 2: raw_repo(2, "c/d", 5000)}, {1: HISTORY, 2: HISTORY})
+        metrics.refresh(self.conn, gh, CONFIG, datetime.date(2026, 9, 19))
+        gh.repos[1] = GitHubError("HTTP 451")
+        out = metrics.refresh(self.conn, gh, CONFIG, self.today)
+        self.assertEqual(out["errors"], 1)
+        self.assertEqual(self.scoped()["github:a/b"], ("include", "famous"))
+        self.assertIsNotNone(self.conn.execute("SELECT 1 FROM snapshot WHERE entity_id = 2 AND taken_at = '2026-09-26'").fetchone())
 
 
 if __name__ == "__main__":

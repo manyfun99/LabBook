@@ -31,7 +31,7 @@ def collect(conn, gh, config):
             by_source[source] += 1
     entities = conn.execute(
         "SELECT COUNT(*) FROM screening WHERE topic = ? AND stage = 'identified'", (topic,)).fetchone()[0]
-    return {"entities": entities, "by_source": dict(by_source)}
+    return {"entities": entities, "by_source": dict(by_source), "truncated": list(getattr(gh, "truncated", []))}
 
 
 def upsert_entity(conn, r):

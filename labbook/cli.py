@@ -53,10 +53,13 @@ def main(argv=None):
 
     if args.cmd == "collect":
         out = collect.collect(conn, gh, config)
-        detail = f"엔티티 {out['entities']}"
+        for q, total in out["truncated"]:
+            print(f"경고: 검색이 1000건에서 잘림 — {q} (전체 {total})", file=sys.stderr)
+        detail = f"엔티티 {out['entities']}" + (f" · 잘린 검색 {len(out['truncated'])}" if out["truncated"] else "")
     elif args.cmd == "refresh":
         out = metrics.refresh(conn, gh, config)
-        detail = f"조회 {out['fetched']} · 범위 내 {out['include']} · 제외 {out['exclude']}"
+        detail = f"조회 {out['fetched']} · 범위 내 {out['include']} · 제외 {out['exclude']}" + (
+            f" · 조회 오류 {out['errors']}(이전 판정 유지)" if out["errors"] else "")
     elif args.cmd == "triage":
         detail = _processed(judge.triage(conn, gh, config, limit=args.limit))
     elif args.cmd == "judge" and args.gold:

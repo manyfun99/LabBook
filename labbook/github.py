@@ -15,6 +15,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 SEARCH_CAP = 1000  # 검색 API 가 한 쿼리에 돌려주는 최대 건수
+README_MAX_AGE_DAYS = 7
 BACKOFFS = (1, 2, 4)
 STAR_BOUNDS = (50, 100, 200, 500, 1000, 5000)
 NOT_REPO_OWNERS = {"topics", "sponsors", "orgs", "features", "marketplace", "apps", "settings",
@@ -77,6 +78,7 @@ class GitHub:
         self.cache_dir = cache_dir
         self.timeout = timeout
         self.this_year = this_year or datetime.date.today().year
+        self.truncated = []  # 연도로 나눠도 1000건을 넘어 잘린 검색 (쿼리, total_count)
 
     def get(self, path):
         failures = 0
@@ -123,11 +125,13 @@ class GitHub:
         """stargazers/history page 1 — 최신 주 먼저, 주는 일요일 시작, 30주."""
         return self.get(f"repos/{full_name}/stargazers/history")
 
-    def readme(self, full_name):
+    def readme(self, full_name, max_age_days=README_MAX_AGE_DAYS):
+        """README 본문과 blob sha. 캐시는 max_age_days 동안만 쓴다 (0 이면 항상 새로 받는다)."""
         cache = self.cache_dir / "readme" / (full_name.replace("/", "__") + ".json") if self.cache_dir else None
-        if cache and cache.exists():
+        if cache and max_age_days and cache.exists():
             hit = json.loads(cache.read_text())
-            return hit["text"], hit["sha"]
+            if self.clock() - hit.get("fetched_at", 0) <= max_age_days * 86400:
+                return hit["text"], hit["sha"]
         try:
             r = self.get(f"repos/{full_name}/readme")
             text, sha = base64.b64decode(r["content"]).decode("utf-8", errors="replace"), r["sha"]
@@ -135,7 +139,7 @@ class GitHub:
             text, sha = "", None
         if cache:
             cache.parent.mkdir(parents=True, exist_ok=True)
-            cache.write_text(json.dumps({"text": text, "sha": sha}, ensure_ascii=False))
+            cache.write_text(json.dumps({"text": text, "sha": sha, "fetched_at": self.clock()}, ensure_ascii=False))
         return text, sha
 
     def top_issues(self, full_name, limit=30):
@@ -154,7 +158,7 @@ class GitHub:
             page += 1
 
     def awesome_links(self, full_name):
-        text, _ = self.readme(full_name)
+        text, _ = self.readme(full_name, max_age_days=0)  # 목록은 갱신되므로 매번 새로 읽는다
         seen, out = set(), []
         for owner, name in LINK_RE.findall(text):
             name = name.removesuffix(".git").rstrip(".")
@@ -186,7 +190,10 @@ class GitHub:
                 continue
             for year in range(2008, self.this_year + 1):
                 yq = f"{q} created:{year}-01-01..{year}-12-31"
-                yield from self._search_all(yq, self._search_page(yq, 1))
+                first = self._search_page(yq, 1)
+                if first["total_count"] > SEARCH_CAP:
+                    self.truncated.append((yq, first["total_count"]))
+                yield from self._search_all(yq, first)
 
     def _search_page(self, q, page):
         return self.get(f"search/repositories?q={quote(q)}&per_page=100&page={page}")

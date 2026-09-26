@@ -17,6 +17,16 @@ class LLMError(Exception):
     pass
 
 
+def _used_model(usage, alias):
+    """modelUsage 에는 보조 모델 사용분도 섞일 수 있다 — 요청한 별칭이 든 키, 없으면 출력 토큰이 가장 많은 키."""
+    if not usage:
+        return alias
+    matching = [k for k in usage if alias.lower() in k.lower()]
+    if matching:
+        return matching[0]
+    return max(usage, key=lambda k: usage[k].get("outputTokens", 0))
+
+
 def run_claude(prompt, schema, model, *, validate=None, runner=subprocess.run, cwd=CWD, timeout=TIMEOUT):
     """구조화 출력과 실제 모델 ID 를 돌려준다. validate(out) 가 예외를 던지면 실패로 보고 재시도한다."""
     cwd.mkdir(parents=True, exist_ok=True)
@@ -47,6 +57,5 @@ def run_claude(prompt, schema, model, *, validate=None, runner=subprocess.run, c
             except ValueError as e:
                 reason = f"검증 실패: {e}"
                 continue
-        used = list(body.get("modelUsage") or {})
-        return out, (used[0] if used else model)
+        return out, _used_model(body.get("modelUsage") or {}, model)
     raise LLMError(reason)

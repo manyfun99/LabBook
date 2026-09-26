@@ -86,6 +86,12 @@ class SelectTest(Base):
         self.assertEqual(slots["kr"], [17, 18])
         self.assertEqual(len(picks), 15)
 
+    def test_현재_범위에서_빠진_레포는_후보와_상위_목록에서_제외한다(self):
+        self.seed.repo(1, scores=(5, 5, 5, 5), scoped=("exclude", "archived"))
+        self.seed.repo(2, scores=(1, 1, 1, 1))
+        self.assertEqual([p["key"] for p in report.select(self.conn, "t")], ["github:o/r2"])
+        self.assertEqual([r["key"] for r in report.top(self.conn, "t", "P")], ["github:o/r2"])
+
     def test_confirm_해야_deep_단계를_쓴다(self):
         self.seed.repo(1, scores=(5, 5, 5, 5))
         report.select(self.conn, "t")

@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 
 from labbook import db, judge
+from labbook.github import GitHubError, NotFound
 from labbook.llm import LLMError
 
 CONFIG = {"topic": "t", "rubric_version": "v1",
@@ -12,15 +13,18 @@ CONFIG = {"topic": "t", "rubric_version": "v1",
 
 
 class FakeGH:
-    def __init__(self, readmes=None):
+    def __init__(self, readmes=None, broken=None):
         self.readmes = readmes or {}
+        self.broken = broken or {}   # gh_id → 던질 예외
         self.calls = []
 
     def get(self, path):
         self.calls.append(path)
         gh_id = int(path.split("/")[1])
+        if gh_id in self.broken:
+            raise self.broken[gh_id]
         return {"id": gh_id, "full_name": f"o/r{gh_id}", "html_url": f"https://github.com/o/r{gh_id}",
-                "description": f"설명 {gh_id}", "topics": ["trading"], "language": "Python"}
+                "description": f"설명 {gh_id}", "topics": getattr(self, "topics", ["trading"]), "language": "Python"}
 
     def repo(self, full_name):
         self.calls.append(full_name)
@@ -111,6 +115,7 @@ class TriageTest(Base):
         self.add(3, triaged="include")
         self.add(4, triaged="error")
         llm = FakeLLM(triage_all_include)
+        # 3 은 triaged=include 라 대기열에 없다
         judge.triage(self.conn, FakeGH(), CONFIG, llm_call=llm)
         self.assertEqual(set(self.screening("triaged")), {1, 3, 4})
         self.assertEqual(self.screening("triaged")[4], ("include", None))
@@ -191,7 +196,42 @@ class TriageTest(Base):
         self.assertFalse(ev[2]["binary_link"])
 
 
+class TriageFailureTest(Base):
+    def test_레포_하나의_GitHub_오류는_그_레포만_error로_두고_나머지를_선별한다(self):
+        self.add(1)
+        self.add(2)
+        judge.triage(self.conn, FakeGH(broken={1: NotFound("x")}), CONFIG, llm_call=FakeLLM(triage_all_include))
+        self.assertEqual(self.screening("triaged")[1][0], "error")
+        self.assertEqual(self.screening("triaged")[2], ("include", None))
+
+
 class JudgeTest(Base):
+    def test_레포_하나의_GitHub_오류는_그_레포만_error로_두고_계속한다(self):
+        self.add(1, triaged="include")
+        self.add(2, triaged="include")
+        judge.judge(self.conn, FakeGH(broken={1: GitHubError("HTTP 451")}), CONFIG, self.topic_dir,
+                    llm_call=FakeLLM(full_ok))
+        self.assertEqual(self.screening("judged")[1][0], "error")
+        self.assertEqual(self.screening("judged")[2][0], "include")
+
+    def test_현재_범위에서_빠진_레포는_판정하지_않는다(self):
+        self.add(1, scoped="exclude", triaged="include")
+        llm = FakeLLM(full_ok)
+        self.assertEqual(judge.judge(self.conn, FakeGH(), CONFIG, self.topic_dir, llm_call=llm), 0)
+
+    def test_메타데이터의_토픽_줄과_언어도_인용할_수_있다(self):
+        self.add(1, triaged="include")
+
+        def meta_quotes(prompt, attempt):
+            out = full_ok(prompt, attempt)
+            out["evidence"] = {"P": "언어: Python", "I": "토픽: trading, stock", "N": "Python", "T": "trading, stock"}
+            return out
+
+        gh = FakeGH()
+        gh.topics = ["trading", "stock"]
+        judge.judge(self.conn, gh, CONFIG, self.topic_dir, llm_call=FakeLLM(meta_quotes))
+        self.assertEqual(self.screening("judged")[1][0], "include")
+
     def test_선별_통과_레포만_정밀_판정하고_저장한다(self):
         self.add(1, triaged="include")
         self.add(2, triaged="unsure")
@@ -280,6 +320,23 @@ class GoldTest(Base):
         self.assertIn("o/r1", report)
         self.assertEqual(self.conn.execute("SELECT COUNT(*) FROM judgment").fetchone()[0], 0)
         self.assertEqual(judge.judge(self.conn, FakeGH(), CONFIG, self.topic_dir, llm_call=FakeLLM(full_ok)), 1)
+
+    def test_빈_골드셋은_명확한_오류(self):
+        (self.topic_dir / "gold.jsonl").write_text("\n")
+        with self.assertRaises(ValueError):
+            judge.gold(FakeGH(), CONFIG, self.topic_dir, llm_call=FakeLLM(full_ok))
+
+    def test_레포_하나가_실패해도_나머지로_일치율을_내고_실패를_리포트에_적는다(self):
+        (self.topic_dir / "gold.jsonl").write_text(
+            '{"repo": "o/r1", "P": 4, "I": 3, "N": 2, "T": 1}\n{"repo": "o/r2", "P": 4, "I": 3, "N": 2, "T": 1}\n')
+
+        def fail_r1(prompt, attempt):
+            return LLMError("x") if "이름: o/r1" in prompt else full_ok(prompt, attempt)
+
+        result = judge.gold(FakeGH(), CONFIG, self.topic_dir, llm_call=FakeLLM(fail_r1))
+        self.assertEqual(result["overall"], 1.0)
+        self.assertEqual(result["failed"], ["o/r1"])
+        self.assertIn("판정 실패: o/r1", (self.topic_dir / "reports" / "gold-v1.md").read_text())
 
 
 if __name__ == "__main__":

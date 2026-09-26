@@ -11,12 +11,15 @@ ORDER = {
     "kr": "MAX(P, I) DESC, T DESC, stars DESC",
 }
 SLOTS = [("P", 5, ""), ("I", 5, ""), ("rising", 3, ""), ("kr", 2, "AND market = 'kr'")]
+OUT_OF_SCOPE = ("AND entity_id NOT IN (SELECT entity_id FROM screening "
+                "WHERE topic = :topic AND stage = 'scoped' AND decision = 'exclude')")
 SOURCE_LABELS = [("search:", "검색"), ("awesome:", "awesome"), ("star", "스타"), ("kr:", "한국")]
 
 
 def top(conn, topic, by, limit=20):
     return [dict(r) for r in conn.execute(
-        f"SELECT * FROM v_repo_latest WHERE topic = ? ORDER BY {ORDER[by]} LIMIT ?", (topic, limit))]
+        f"SELECT * FROM v_repo_latest WHERE topic = :topic {OUT_OF_SCOPE} ORDER BY {ORDER[by]} LIMIT :limit",
+        {"topic": topic, "limit": limit})]
 
 
 def select(conn, topic, add=(), confirm=False):
@@ -24,7 +27,8 @@ def select(conn, topic, add=(), confirm=False):
     picks, taken = [], set()
     for slot, n, where in SLOTS:
         order = ORDER["momentum" if slot == "rising" else slot]
-        rows = conn.execute(f"SELECT entity_id, key FROM v_repo_latest WHERE topic = ? {where} ORDER BY {order}", (topic,))
+        rows = conn.execute(f"SELECT entity_id, key FROM v_repo_latest WHERE topic = :topic {where} {OUT_OF_SCOPE} "
+                            f"ORDER BY {order}", {"topic": topic})
         got = 0
         for r in rows:
             if got == n:

@@ -119,17 +119,40 @@ class EndpointTest(unittest.TestCase):
             self.assertEqual(gh.readme("a/b"), (text, sha))
             self.assertEqual(runner.calls, ["repos/a/b/readme"])
 
+    def test_readme_캐시는_7일이_지나면_다시_받는다(self):
+        with tempfile.TemporaryDirectory() as d:
+            now = [1000.0]
+            runner = FakeRunner({"repos/a/b/readme": [http(200, fixture("readme_prism_insight"))] * 2})
+            gh = github.GitHub(runner=runner, sleep=lambda s: None, clock=lambda: now[0], cache_dir=Path(d))
+            gh.readme("a/b")
+            now[0] += 7 * 86400
+            gh.readme("a/b")
+            self.assertEqual(len(runner.calls), 1)
+            now[0] += 1
+            gh.readme("a/b")
+            self.assertEqual(len(runner.calls), 2)
+
+    def test_awesome_목록은_캐시를_쓰지_않고_매번_새로_읽는다(self):
+        with tempfile.TemporaryDirectory() as d:
+            body = {"sha": "s", "encoding": "base64", "content": base64.b64encode(b"- https://github.com/x/y").decode()}
+            runner = FakeRunner({"repos/o/list/readme": [http(200, body)] * 2})
+            gh, _ = make(runner, cache_dir=Path(d))
+            gh.awesome_links("o/list")
+            gh.awesome_links("o/list")
+            self.assertEqual(len(runner.calls), 2)
+
     def test_readme가_없으면_빈_문자열(self):
         gh, _ = make(FakeRunner({"repos/a/b/readme": [http(404, {})]}))
         self.assertEqual(gh.readme("a/b"), ("", None))
 
-    def test_top_issues는_PR을_빼고_제목을_준다(self):
+    def test_top_issues는_PR을_빼고_제목_댓글수_url을_준다(self):
         path = "repos/a/b/issues?state=all&sort=comments&direction=desc&per_page=100"
         gh, _ = make(FakeRunner({path: [http(200, fixture("issues_prism_insight"))]}))
-        issues = gh.top_issues("a/b", limit=30)
-        raw = fixture("issues_prism_insight")
-        self.assertEqual(len(issues), sum(1 for i in raw if "pull_request" not in i))
-        self.assertEqual(set(issues[0]), {"title", "comments", "url"})
+        self.assertEqual(gh.top_issues("a/b", limit=30), [{
+            "title": "[CLA] 기존 기여에 대한 소급 동의 요청 / Retroactive consent request",
+            "comments": 9,
+            "url": "https://github.com/dragon1086/prism-insight/issues/603",
+        }])
 
     def test_top_issues는_limit만큼만_준다(self):
         path = "repos/a/b/issues?state=all&sort=comments&direction=desc&per_page=100"
@@ -152,8 +175,10 @@ class EndpointTest(unittest.TestCase):
         self.assertEqual(gh.awesome_links("owner/self"), ["Foo/bar-baz", "x/y"])
 
 
-def search_handler(totals):
-    """q 에 포함된 구간 문자열로 total_count 를 정해 돌려준다. totals: [(부분문자열, total)] 앞에서부터 매칭."""
+def search_handler(totals, shared=0):
+    """q 에 포함된 구간 문자열로 total_count 를 정해 돌려준다. totals: [(부분문자열, total)] 앞에서부터 매칭.
+    id 는 (q, 순번)마다 결정적으로 붙이고, 쿼리마다 앞 shared 개는 모든 쿼리가 같은 레포(id 0..shared-1)를 돌려준다."""
+    ids = {}
 
     def handle(path):
         qs = parse_qs(urlparse(path).query)
@@ -161,8 +186,10 @@ def search_handler(totals):
         total = next(t for key, t in totals if key in q)
         start = (page - 1) * 100
         n = max(0, min(100, min(total, 1000) - start))
-        items = [{"id": hash((q, start + i)) & 0xFFFFFFF, "full_name": f"o/{abs(hash((q, start + i)))}",
-                  "stargazers_count": 1} for i in range(n)]
+        items = []
+        for i in range(start, start + n):
+            gid = i if i < shared else ids.setdefault((q, i), 1_000_000 + len(ids))
+            items.append({"id": gid, "full_name": f"o/r{gid}", "stargazers_count": 1})
         return http(200, {"total_count": total, "incomplete_results": False, "items": items})
 
     return handle
@@ -192,6 +219,20 @@ class SearchTest(unittest.TestCase):
         gh, _ = make(runner, this_year=2026)
         items = gh.search_repos("topic:x", min_stars=100)
         self.assertEqual(len(items), 1200)
+
+    def test_구간_사이에_겹친_레포는_한번만_센다(self):
+        totals = [("stars:100..199", 400), ("stars:200..499", 300), ("stars:500..999", 200),
+                  ("stars:1000..4999", 100), ("stars:>=5000", 10), ("", 1500)]
+        gh, _ = make(FakeRunner(handler=search_handler(totals, shared=5)))
+        # 구간 5개가 모두 id 0..4 를 돌려준다 → 1010 - 4*5
+        self.assertEqual(len(gh.search_repos("topic:trading", min_stars=100)), 990)
+
+    def test_연도_구간도_1000건을_넘으면_잘린_쿼리를_기록한다(self):
+        totals = [("stars:>=100", 1400), ("created:2026", 1400), ("created:", 0),
+                  ("stars:100..199", 1400), ("stars:", 0)]
+        gh, _ = make(FakeRunner(handler=search_handler(totals)), this_year=2026)
+        self.assertEqual(len(gh.search_repos("topic:x", min_stars=100)), 1000)
+        self.assertEqual(gh.truncated, [("topic:x stars:100..199 created:2026-01-01..2026-12-31", 1400)])
 
     def test_하한_50이면_50_99_구간부터_시작한다(self):
         self.assertEqual(github.star_slices(50)[0], "50..99")

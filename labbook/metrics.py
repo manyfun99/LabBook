@@ -65,7 +65,7 @@ def refresh(conn, gh, config, today=None):
     rows = conn.execute(
         "SELECT e.id, e.gh_id, s.sources FROM screening s JOIN entity e ON e.id = s.entity_id "
         "WHERE s.topic = ? AND s.stage = 'identified' ORDER BY e.id", (topic,)).fetchall()
-    counts = {"fetched": 0, "include": 0, "exclude": 0}
+    counts = {"fetched": 0, "include": 0, "exclude": 0, "errors": 0}
     for row in rows:
         with conn:  # 레포 단위로 커밋 — 중단 후 재실행하면 오늘 스냅샷이 있는 레포는 건너뛴다
             snap = conn.execute("SELECT * FROM snapshot WHERE entity_id = ? AND taken_at = ?",
@@ -76,6 +76,10 @@ def refresh(conn, gh, config, today=None):
                 except NotFound:
                     _set_scope(conn, topic, row["id"], "exclude", "gone")
                     counts["exclude"] += 1
+                    continue
+                except GitHubError:
+                    # 451·5xx 재시도 소진 등 — 이 레포만 건너뛰고 이전 범위 판정을 유지한다 (다음 refresh 에 다시 시도)
+                    counts["errors"] += 1
                     continue
                 counts["fetched"] += 1
             decision, reason = scope(snap, json.loads(row["sources"]), cfg)

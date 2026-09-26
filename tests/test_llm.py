@@ -44,6 +44,18 @@ class RunClaudeTest(unittest.TestCase):
         self.assertEqual(out, {"a": 1})
         self.assertEqual(model, "claude-opus-5-5")
 
+    def test_modelUsage에_보조_모델이_섞여도_요청한_모델을_기록한다(self):
+        body = {"is_error": False, "structured_output": {"a": 1},
+                "modelUsage": {"claude-haiku-4-5": {"outputTokens": 900}, "claude-opus-5-5": {"outputTokens": 50}}}
+        runner = Runner(subprocess.CompletedProcess([], 0, stdout=json.dumps(body), stderr=""))
+        self.assertEqual(self.call(runner)[1], "claude-opus-5-5")
+
+    def test_별칭과_맞는_키가_없으면_출력_토큰이_가장_많은_모델(self):
+        body = {"is_error": False, "structured_output": {"a": 1},
+                "modelUsage": {"x-small": {"outputTokens": 5}, "x-large": {"outputTokens": 50}}}
+        runner = Runner(subprocess.CompletedProcess([], 0, stdout=json.dumps(body), stderr=""))
+        self.assertEqual(self.call(runner)[1], "x-large")
+
     def test_도구_없이_세션을_남기지_않고_격리된_cwd에서_호출한다(self):
         runner = Runner(ok({"a": 1}))
         self.call(runner)
