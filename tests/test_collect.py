@@ -16,6 +16,7 @@ class FakeGitHub:
         self.awesome = awesome or {}
         self.star_list = starred or []
         self.search_calls = []
+        self.truncated = []  # 실제 GitHub 처럼 항상 있다
 
     def search_repos(self, query, min_stars):
         self.search_calls.append((query, min_stars))

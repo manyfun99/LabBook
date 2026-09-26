@@ -4,9 +4,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from labbook import db, judge, llm
+from labbook import db, judge
 from labbook.github import GitHub, GitHubError, NotFound
-from labbook.llm import LLMError
+from labbook.llm import ATTEMPTS, LLMError, run_claude
 
 CONFIG = {"topic": "t", "rubric_version": "v1",
           "triage": {"model": "sonnet", "batch": 20, "readme_chars": 2000},
@@ -55,7 +55,7 @@ class FakeLLM:
 
     def __call__(self, prompt, schema, model, *, validate=None):
         self.prompts.append((prompt, model))
-        attempts = iter(range(llm.ATTEMPTS))
+        attempts = iter(range(ATTEMPTS))
 
         def runner(args, *, input, **kwargs):
             self.runs += 1
@@ -66,8 +66,8 @@ class FakeLLM:
                     "modelUsage": {f"model-{model}": {"outputTokens": 1}}}
             return subprocess.CompletedProcess(args, 0, stdout=json.dumps(body), stderr="")
 
-        return llm.run_claude(prompt, schema, model, validate=validate, runner=runner,
-                              cwd=Path(tempfile.gettempdir()))  # 이미 있는 디렉터리 — mkdir 부작용 없음
+        return run_claude(prompt, schema, model, validate=validate, runner=runner,
+                          cwd=Path(tempfile.gettempdir()))  # 이미 있는 디렉터리 — mkdir 부작용 없음
 
 
 def triage_all_include(prompt, attempt):
@@ -217,7 +217,7 @@ class TriageFailureTest(Base):
         llm = FakeLLM(triage_all_include)
         judge.triage(self.conn, FakeGH(broken={1: NotFound("x"), 2: GitHubError("x")}), CONFIG, llm_call=llm)
         self.assertEqual(llm.prompts, [])
-        self.assertEqual({v[0] for v in self.screening("triaged").values()}, {"error"})
+        self.assertEqual(self.screening("triaged"), {1: ("error", "github: x"), 2: ("error", "github: x")})
 
 
 class JudgeTest(Base):
@@ -285,7 +285,7 @@ class JudgeTest(Base):
 
         llm_call = FakeLLM(fabricated)
         judge.judge(self.conn, FakeGH(), CONFIG, self.topic_dir, llm_call=llm_call)
-        self.assertEqual(llm_call.runs, llm.ATTEMPTS)
+        self.assertEqual(llm_call.runs, ATTEMPTS)
         self.assertEqual(self.screening("judged")[1][0], "error")
         self.assertEqual(self.conn.execute("SELECT COUNT(*) FROM judgment").fetchone()[0], 0)
         judge.judge(self.conn, FakeGH(), CONFIG, self.topic_dir, llm_call=FakeLLM(full_ok))

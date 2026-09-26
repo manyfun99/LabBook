@@ -28,7 +28,8 @@ class CollectCommandTest(unittest.TestCase):
             return conn
 
         out, err = io.StringIO(), io.StringIO()
-        with mock.patch.object(cli, "ROOT", self.root), mock.patch.object(cli, "GitHub", lambda **kw: gh), \
+        with mock.patch.object(cli, "ROOT", self.root), mock.patch.object(cli, "DATA", self.root / "data"), \
+                mock.patch.object(cli, "CACHE", self.root / ".cache"), mock.patch.object(cli, "GitHub", lambda **kw: gh), \
                 mock.patch.object(cli.db, "connect", connect), \
                 contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
             cli.main(["--db", str(self.root / "x.db"), *argv])

@@ -96,14 +96,15 @@ def funnel(conn, topic, topic_dir, date):
 
 def _suspects(conn, topic, included):
     """범위 내 레포 중 최신 스냅샷 플래그나 판정 증거(인젝션·바이너리 링크)가 선 것."""
+    ids = json.dumps(sorted(included))  # 범위 내 레포만 훑는다 — 다른 토픽·범위 밖 행은 읽지 않는다
     flagged = {r[0] for r in conn.execute(
-        "SELECT s.entity_id FROM snapshot s "
-        "WHERE s.taken_at = (SELECT MAX(taken_at) FROM snapshot WHERE entity_id = s.entity_id) "
-        "AND json_array_length(COALESCE(s.flags, '[]')) > 0")}
+        "SELECT s.entity_id FROM snapshot s WHERE s.entity_id IN (SELECT value FROM json_each(?)) "
+        "AND s.taken_at = (SELECT MAX(taken_at) FROM snapshot WHERE entity_id = s.entity_id) "
+        "AND json_array_length(COALESCE(s.flags, '[]')) > 0", (ids,))}
     flagged |= {r[0] for r in conn.execute(
-        "SELECT entity_id FROM judgment WHERE topic = ? "
-        "AND (json_extract(evidence, '$.injection_suspect') OR json_extract(evidence, '$.binary_link'))", (topic,))}
-    return len(flagged & included)
+        "SELECT entity_id FROM judgment WHERE topic = ? AND entity_id IN (SELECT value FROM json_each(?)) "
+        "AND (json_extract(evidence, '$.injection_suspect') OR json_extract(evidence, '$.binary_link'))", (topic, ids))}
+    return len(flagged)
 
 
 def _fmt(counter):
