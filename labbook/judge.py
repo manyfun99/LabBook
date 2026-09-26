@@ -8,7 +8,7 @@ import re
 
 from labbook import llm
 from labbook.db import set_screening, utc_now
-from labbook.github import GitHubError, normalize_repo
+from labbook.github import GitHubError
 
 CATEGORIES = ["llm-agent", "auto-trading", "foundation-model", "backtest-quant", "data-mcp", "broker-api",
               "portfolio-pf", "dashboard", "research-screener", "crypto-bot", "prediction-market", "agent-skill", "other"]
@@ -105,7 +105,7 @@ def _triage_batch(conn, gh, config, rows, llm_call):
     items = {}
     for row in rows:
         try:
-            meta = normalize_repo(gh.get(f"repositories/{row['gh_id']}"))
+            meta = gh.repo_by_id(row["gh_id"])
             readme, sha = gh.readme(meta["full_name"])
         except GitHubError as e:  # NotFound 포함 — 이 레포만 error 로 두고 다음 실행에 다시 시도
             with conn:
@@ -157,7 +157,7 @@ def judge(conn, gh, config, topic_dir, *, llm_call=llm.run_claude, limit=None):
     for row in pending:
         with conn:  # 레포 단위 커밋 — 중단해도 끝난 것만 남는다
             try:
-                meta = normalize_repo(gh.get(f"repositories/{row['gh_id']}"))
+                meta = gh.repo_by_id(row["gh_id"])
                 out, model, sha, truncated = _judge_one(gh, config, rubric, meta, llm_call)
             except (llm.LLMError, GitHubError) as e:  # 이 레포만 error — 다음 실행에 다시 시도
                 set_screening(conn, topic, row["id"], "judged", "error", str(e)[:200])

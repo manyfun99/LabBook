@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 from labbook import db, metrics
-from labbook.github import GitHubError, NotFound
+from labbook.github import GitHub, GitHubError, NotFound
 
 FIX = Path(__file__).parent / "fixtures"
 HISTORY = json.loads((FIX / "history_prism_insight.json").read_text())
@@ -95,6 +95,8 @@ class ScopeTest(unittest.TestCase):
 class FakeGH:
     def __init__(self, repos, histories):
         self.repos, self.histories, self.calls = repos, histories, []
+
+    repo_by_id = GitHub.repo_by_id  # 실제 메서드를 빌려 get 을 거치게 한다
 
     def get(self, path):
         self.calls.append(path)

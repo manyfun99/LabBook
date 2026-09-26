@@ -125,6 +125,10 @@ class GitHub:
     def repo(self, full_name):
         return normalize_repo(self.get(f"repos/{full_name}"))
 
+    def repo_by_id(self, gh_id):
+        """gh_id 로 조회 — 이름 변경에 강하고, 삭제된 레포의 이름을 다른 레포가 쓰는 경우에도 엉뚱한 레포를 보지 않는다."""
+        return normalize_repo(self.get(f"repositories/{gh_id}"))
+
     def history(self, full_name):
         """stargazers/history page 1 — 최신 주 먼저, 주는 일요일 시작, 30주."""
         return self.get(f"repos/{full_name}/stargazers/history")

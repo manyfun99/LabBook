@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 
 from labbook import db, judge, llm
-from labbook.github import GitHubError, NotFound
+from labbook.github import GitHub, GitHubError, NotFound
 from labbook.llm import LLMError
 
 CONFIG = {"topic": "t", "rubric_version": "v1",
@@ -18,6 +18,8 @@ class FakeGH:
         self.readmes = readmes or {}
         self.broken = broken or {}   # gh_id → 던질 예외
         self.calls = []
+
+    repo_by_id = GitHub.repo_by_id  # 실제 메서드를 빌려 get 을 거치게 한다
 
     def get(self, path):
         self.calls.append(path)

@@ -112,6 +112,18 @@ class EndpointTest(unittest.TestCase):
         self.assertEqual(r["watchers"], fixture("repo_prism_insight")["subscribers_count"])
         self.assertIn("stars", r)
 
+    def test_repo_by_id는_gh_id_경로로_조회해_정규화한다(self):
+        raw = fixture("repo_prism_insight")
+        runner = FakeRunner({f"repositories/{raw['id']}": [http(200, raw)]})
+        gh, _ = make(runner)
+        self.assertEqual(gh.repo_by_id(raw["id"]), github.normalize_repo(raw))
+        self.assertEqual(runner.calls, [f"repositories/{raw['id']}"])
+
+    def test_repo_by_id는_없으면_NotFound(self):
+        gh, _ = make(FakeRunner({"repositories/9": [http(404, {"message": "Not Found"})]}))
+        with self.assertRaises(github.NotFound):
+            gh.repo_by_id(9)
+
     def test_history는_page1을_돌려준다(self):
         gh, _ = make(FakeRunner({"repos/a/b/stargazers/history": [http(200, fixture("history_prism_insight"))]}))
         self.assertEqual(len(gh.history("a/b")), 30)

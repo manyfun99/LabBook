@@ -4,7 +4,7 @@ import json
 
 from labbook.collect import upsert_entity
 from labbook.db import set_screening
-from labbook.github import GitHubError, NotFound, normalize_repo
+from labbook.github import GitHubError, NotFound
 
 SPIKE_SHARE = 0.7        # 3일에 30일 증가분의 70% 이상
 SPIKE_MIN_D30 = 30       # 30일 증가가 이보다 작으면 급등을 보지 않는다 (소수 스타의 우연한 몰림)
@@ -89,8 +89,7 @@ def refresh(conn, gh, config, today=None):
 
 
 def _take_snapshot(conn, gh, row, today):
-    # gh_id 로 조회 — 이름 변경에 강하고, 삭제된 레포의 이름을 다른 레포가 쓰는 경우에도 엉뚱한 레포를 보지 않는다
-    repo = normalize_repo(gh.get(f"repositories/{row['gh_id']}"))
+    repo = gh.repo_by_id(row["gh_id"])
     upsert_entity(conn, repo)
     try:
         days = daily_counts(gh.get(f"repositories/{row['gh_id']}/stargazers/history") or [], today)
