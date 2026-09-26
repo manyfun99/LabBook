@@ -58,12 +58,12 @@ def main(argv=None):
         out = metrics.refresh(conn, gh, config)
         detail = f"조회 {out['fetched']} · 범위 내 {out['include']} · 제외 {out['exclude']}"
     elif args.cmd == "triage":
-        detail = f"처리 {judge.triage(conn, gh, config, limit=args.limit)}"
+        detail = _processed(judge.triage(conn, gh, config, limit=args.limit))
     elif args.cmd == "judge" and args.gold:
         out = judge.gold(gh, config, topic_dir)
         detail = f"골드 일치율 {out['overall']:.0%} → reports/gold-{config['rubric_version']}.md"
     elif args.cmd == "judge":
-        detail = f"처리 {judge.judge(conn, gh, config, topic_dir, limit=args.limit)}"
+        detail = _processed(judge.judge(conn, gh, config, topic_dir, limit=args.limit))
     elif args.cmd == "funnel":
         print(report.funnel(conn, args.topic, topic_dir, today))
         detail = f"reports/funnel-{today}.md"
@@ -83,6 +83,10 @@ def main(argv=None):
         detail = f"심층분석 {len(picks)}개 확정"
     print(detail)
     _log(topic_dir, args.cmd, detail, today)
+
+
+def _processed(n):
+    return f"처리 {n}" if n else "대기 0건"
 
 
 def _print_top(rows):

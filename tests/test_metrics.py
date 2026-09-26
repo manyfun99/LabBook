@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 from labbook import db, metrics
-from labbook.github import NotFound
+from labbook.github import GitHubError, NotFound
 
 FIX = Path(__file__).parent / "fixtures"
 HISTORY = json.loads((FIX / "history_prism_insight.json").read_text())
@@ -97,7 +97,10 @@ class FakeGH:
         parts = path.split("/")
         gh_id = int(parts[1])
         if path.endswith("/stargazers/history"):
-            return self.histories[gh_id]
+            h = self.histories[gh_id]
+            if isinstance(h, Exception):
+                raise h
+            return h
         if gh_id not in self.repos:
             raise NotFound(path)
         return self.repos[gh_id]
@@ -171,6 +174,27 @@ class RefreshTest(unittest.TestCase):
         metrics.refresh(self.conn, gh, CONFIG, self.today)
         self.assertIn("repositories/1", gh.calls)
         self.assertIn("repositories/1/stargazers/history", gh.calls)
+
+    def test_history가_실패하면_이전_스냅샷과의_스타_차이로_대신한다(self):
+        gh = FakeGH({1: raw_repo(1, "a/b", 500), 2: raw_repo(2, "c/d", 200)}, {1: HISTORY, 2: HISTORY})
+        metrics.refresh(self.conn, gh, CONFIG, datetime.date(2026, 8, 20))   # 37일 전
+        gh.repos[1] = raw_repo(1, "a/b", 520)
+        metrics.refresh(self.conn, gh, CONFIG, datetime.date(2026, 9, 20))   # 6일 전
+        gh.repos[1] = raw_repo(1, "a/b", 900)
+        gh.histories[1] = GitHubError("history 제한")
+        metrics.refresh(self.conn, gh, CONFIG, self.today)
+        snap = self.conn.execute("SELECT d7, d30, d90 FROM snapshot WHERE entity_id = 1 AND taken_at = '2026-09-26'").fetchone()
+        # d7: 7일 이상 지난 가장 가까운 스냅샷 없음(6일 전뿐) → 37일 전 기준은 d30·d90 에만 쓴다
+        self.assertEqual((snap["d7"], snap["d30"], snap["d90"]), (None, 400, None))
+        self.assertEqual(self.scoped()["github:a/b"], ("include", "rising"))
+
+    def test_history도_이전_스냅샷도_없으면_스타_기준만_적용한다(self):
+        gh = FakeGH({1: raw_repo(1, "a/b", 5000), 2: raw_repo(2, "c/d", 500)},
+                    {1: NotFound("x"), 2: GitHubError("x")})
+        metrics.refresh(self.conn, gh, CONFIG, self.today)
+        snap = self.conn.execute("SELECT d30 FROM snapshot WHERE entity_id = 2").fetchone()
+        self.assertIsNone(snap["d30"])
+        self.assertEqual(self.scoped(), {"github:a/b": ("include", "famous"), "github:c/d": ("exclude", "below_threshold")})
 
 
 if __name__ == "__main__":

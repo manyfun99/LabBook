@@ -4,12 +4,13 @@ import json
 
 from labbook.collect import upsert_entity
 from labbook.db import utc_now
-from labbook.github import NotFound, normalize_repo
+from labbook.github import GitHubError, NotFound, normalize_repo
 
 SPIKE_SHARE = 0.7        # 3일에 30일 증가분의 70% 이상
 SPIKE_MIN_D30 = 30       # 30일 증가가 이보다 작으면 급등을 보지 않는다 (소수 스타의 우연한 몰림)
 LOW_WATCHERS = 0.015     # watchers/★
 LOW_FORKS = 0.01         # forks/★ — 계획의 "레포 나이 대비 커밋 수" 대용 (커밋 수는 레포마다 API 한 번 더 필요)
+FALLBACK_WINDOW = 7      # history 폴백: dN 은 N~N+7일 전 스냅샷과 비교 (refresh 가 주 1회라서)
 
 
 def daily_counts(history, today):
@@ -88,17 +89,27 @@ def _take_snapshot(conn, gh, row, today):
     repo = normalize_repo(gh.get(f"repositories/{row['gh_id']}"))
     upsert_entity(conn, repo)
     try:
-        history = gh.get(f"repositories/{row['gh_id']}/stargazers/history") or []
-    except NotFound:
-        history = []
-    days = daily_counts(history, today)
-    d7, d30, d90 = momentum(days)
+        days = daily_counts(gh.get(f"repositories/{row['gh_id']}/stargazers/history") or [], today)
+        d7, d30, d90 = momentum(days)
+    except (NotFound, GitHubError):
+        # 계획 §7.1 폴백 — 이전 스냅샷과의 스타 수 차이. 비교할 스냅샷이 없으면 None (범위 컷은 ★ 기준만)
+        days = []
+        d7, d30, d90 = (_delta_from_snapshots(conn, row["id"], today, repo["stars"], n) for n in (7, 30, 90))
     snap = {"entity_id": row["id"], "taken_at": today.isoformat(), "stars": repo["stars"], "forks": repo["forks"],
             "watchers": repo["watchers"], "open_issues": repo["open_issues"], "pushed_at": repo["pushed_at"],
             "created_at": repo["created_at"], "archived": int(bool(repo["archived"])),
             "d7": d7, "d30": d30, "d90": d90, "flags": json.dumps(flags(repo, days[:30]))}
     conn.execute(f"INSERT INTO snapshot ({', '.join(snap)}) VALUES ({', '.join('?' * len(snap))})", list(snap.values()))
     return snap
+
+
+def _delta_from_snapshots(conn, entity_id, today, stars, n):
+    lo = (today - datetime.timedelta(days=n + FALLBACK_WINDOW)).isoformat()
+    hi = (today - datetime.timedelta(days=n)).isoformat()
+    prev = conn.execute(
+        "SELECT stars FROM snapshot WHERE entity_id = ? AND taken_at BETWEEN ? AND ? ORDER BY taken_at DESC LIMIT 1",
+        (entity_id, lo, hi)).fetchone()
+    return None if prev is None or prev["stars"] is None or stars is None else stars - prev["stars"]
 
 
 def _set_scope(conn, topic, entity_id, decision, reason):
