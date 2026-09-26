@@ -167,6 +167,11 @@ class SuspectsTest(Base):
                               "VALUES ('t', ?, 'triage', 'v1', 'm', ?, 't')", (eid, evidence))
         self.assertEqual(report._suspects(self.conn, "t", self.included()), 0)
 
+    def test_범위_밖_레포의_판정_증거는_세지_않는다(self):
+        self.seed.repo(1, scoped=("exclude", "below_threshold"), scores=(1, 1, 1, 1), injection=True)
+        self.seed.repo(2)
+        self.assertEqual(report._suspects(self.conn, "t", self.included()), 0)
+
     def test_다른_토픽의_판정_증거는_세지_않는다(self):
         eid = self.seed.repo(1)
         self.conn.execute("INSERT INTO judgment (topic, entity_id, stage, rubric_version, model, evidence, judged_at) "
@@ -175,9 +180,9 @@ class SuspectsTest(Base):
 
     def test_쿼리_수는_레포_수와_무관하다(self):
         def statements():
-            n = []
+            n, included = [], self.included()   # trace 를 켜기 전에 — _suspects 의 문장만 센다
             self.conn.set_trace_callback(n.append)
-            count = report._suspects(self.conn, "t", self.included())
+            count = report._suspects(self.conn, "t", included)
             self.conn.set_trace_callback(None)
             return len(n), count
 

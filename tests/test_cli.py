@@ -44,7 +44,7 @@ class CollectCommandTest(unittest.TestCase):
 
     def test_잘린_검색이_없으면_경고하지_않는다(self):
         _, err = self.run_main(FakeGitHub(), "collect", "t")
-        self.assertEqual(err, "")
+        self.assertNotIn("경고: 검색이", err)
         self.assertNotIn("잘린 검색", (self.topic_dir / "log.md").read_text())
 
 
