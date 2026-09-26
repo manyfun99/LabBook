@@ -1,0 +1,71 @@
+[
+ {
+  "id": 1074561042,
+  "full_name": "gastownhall/beads",
+  "html_url": "https://github.com/gastownhall/beads",
+  "description": "Beads - A memory upgrade for your coding agent",
+  "topics": [
+   "agents",
+   "claude-code",
+   "coding"
+  ],
+  "language": "Go",
+  "stargazers_count": 27434,
+  "forks_count": 1858,
+  "subscribers_count": null,
+  "watchers_count": 27434,
+  "open_issues_count": 1309,
+  "pushed_at": "2026-09-25T20:53:47Z",
+  "created_at": "2025-10-12T03:09:46Z",
+  "archived": false,
+  "fork": false
+ },
+ {
+  "id": 1148788086,
+  "full_name": "mattpocock/skills",
+  "html_url": "https://github.com/mattpocock/skills",
+  "description": "Skills for Real Engineers. Straight from my .agents directory.",
+  "topics": [],
+  "language": "Shell",
+  "stargazers_count": 269901,
+  "forks_count": 22740,
+  "subscribers_count": null,
+  "watchers_count": 269901,
+  "open_issues_count": 529,
+  "pushed_at": "2026-09-24T14:07:55Z",
+  "created_at": "2026-02-03T11:15:53Z",
+  "archived": false,
+  "fork": false
+ },
+ {
+  "id": 1255217938,
+  "full_name": "loopx-project/loopx",
+  "html_url": "https://github.com/loopx-project/loopx",
+  "description": "A control plane with a durable state kernel for long-horizon agents and teams. Keep work moving and improving across sessions, with less human attention.",
+  "topics": [
+   "agent-control-plane",
+   "agent-harness",
+   "ai-agents",
+   "claude-code",
+   "codex",
+   "dsh-plugin",
+   "local-first",
+   "long-horizon-agents",
+   "loop-engineering",
+   "multi-agent",
+   "personal-agent",
+   "rsi",
+   "workflow-automation"
+  ],
+  "language": "Python",
+  "stargazers_count": 6001,
+  "forks_count": 581,
+  "subscribers_count": null,
+  "watchers_count": 6001,
+  "open_issues_count": 115,
+  "pushed_at": "2026-09-26T05:00:10Z",
+  "created_at": "2026-05-31T14:58:56Z",
+  "archived": false,
+  "fork": false
+ }
+]

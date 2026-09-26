@@ -1,0 +1,36 @@
+[
+ {
+  "number": 603,
+  "title": "[CLA] 기존 기여에 대한 소급 동의 요청 / Retroactive consent request",
+  "comments": 9,
+  "html_url": "https://github.com/dragon1086/prism-insight/issues/603"
+ },
+ {
+  "number": 362,
+  "title": "feat(phase6-s6): 인사이트 이미지 방송 (고급 테마+패턴 주석, 기본 OFF)",
+  "comments": 1,
+  "html_url": "https://github.com/dragon1086/prism-insight/pull/362",
+  "pull_request": {}
+ },
+ {
+  "number": 395,
+  "title": "fix(subscriber): importlib loader, startup self-check, health monitor",
+  "comments": 1,
+  "html_url": "https://github.com/dragon1086/prism-insight/pull/395",
+  "pull_request": {}
+ },
+ {
+  "number": 382,
+  "title": "feat(loops): broadcast Loop A/B sells to Redis+GCP (subscribers were diverging)",
+  "comments": 1,
+  "html_url": "https://github.com/dragon1086/prism-insight/pull/382",
+  "pull_request": {}
+ },
+ {
+  "number": 383,
+  "title": "fix(loop-c): snap KR amend prices to KRX 호가단위 (tick size)",
+  "comments": 1,
+  "html_url": "https://github.com/dragon1086/prism-insight/pull/383",
+  "pull_request": {}
+ }
+]
