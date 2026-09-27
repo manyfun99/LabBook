@@ -20,3 +20,6 @@
 ## [2026-09-27] judge | 처리 38
 ## [2026-09-27] judge | 처리 3
 ## [2026-09-27] judge | 처리 3
+## [2026-09-27] select | 심층분석 19개 확정
+## [2026-09-27] select-review | 그대로 확정 · add koala73/worldmonitor, dragon1086/prism-insight, hkuds/vibe-trading, chrisryugj/korean-dart-mcp (사용자 선택)
+## [2026-09-27] funnel | reports/funnel-2026-09-27.md
