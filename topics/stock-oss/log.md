@@ -33,3 +33,8 @@
 ## [2026-09-27] deep-dive | virattt/ai-hedge-fund
 ## [2026-09-27] deep-dive | valuecell-ai/valuecell
 ## [2026-09-27] deep-dive | wbh604/uzi-skill
+## [2026-09-27] deep-dive | tauricresearch/tradingagents
+## [2026-09-27] deep-dive | open-dev-society/openstock
+## [2026-09-27] deep-dive | 666ghj/mirofish
+## [2026-09-27] deep-dive | financedata/financedatareader
+## [2026-09-27] deep-dive | financedata/opendartreader

@@ -14,3 +14,8 @@
 - [virattt/ai-hedge-fund](notes/virattt__ai-hedge-fund.md) — 투자 대가 페르소나 LLM 과 PEAD 퀀트를 pod·리스크·원장 구조로 엮은 교육용 AI 헤지펀드. PIT·blind 백테스트는 갖췄지만 데이터가 저자의 유료 Financial Datasets 에 묶인 미국 전용이다
 - [valuecell-ai/valuecell](notes/valuecell-ai__valuecell.md) — LLM 에이전트로 크립토 선물 자동매매와 A주·미국 리서치를 하는 데스크톱·웹 앱. 호스팅판과 검증 안 된 수익률 리더보드를 두며, 자체 호스팅·Docker 요청이 가장 많다
 - [wbh604/uzi-skill](notes/wbh604__uzi-skill.md) — 종목 하나를 22개 데이터 차원·기관식 템플릿 22종·투자 대가 페르소나 66명으로 채점해 HTML 리포트로 내는 에이전트 플러그인. 자체 성과 주장은 스스로 부정하지만 성과 추적과 호스팅 UI 가 비어 있다
+- [tauricresearch/tradingagents](notes/tauricresearch__tradingagents.md) — 역할 분담 LLM 에이전트들이 토론해 등급을 내는 LangGraph 연구 프레임워크. 최근 PIT 정비는 탄탄하지만 논문의 SR 8.21 성과는 3개월·3종목·누출·재현 실패로 믿기 어렵다
+- [open-dev-society/openstock](notes/open-dev-society__openstock.md) — Finnhub 무료 키와 TradingView 위젯으로 만든 튜토리얼 기반 무료 주식 대시보드(미국·크립토 위주, KRX 차트 차단). ★19k 에 비해 이슈가 얇고 수요는 자체 호스팅 간소화와 미국 밖 시장에 몰린다
+- [666ghj/mirofish](notes/666ghj__mirofish.md) — 문서 GraphRAG 위에서 페르소나 수백 개를 가상 SNS 에서 부딪혀 정성 예측 리포트를 내는 여론 시뮬레이터. 검증 기록이 없고 Zep·토큰 비용이 크며 ★급증은 미디어 효과다
+- [financedata/financedatareader](notes/financedata__financedatareader.md) — KRX·네이버·Yahoo·FRED 를 한 API 로 묶은 한국 개인 퀀트의 표준 무료 데이터 크롤러. KRX 로그인 필수화 뒤 메인테이너 계정 기반 GitHub 캐시로 버티며 90일 비밀번호 주기마다 끊기는 단일 장애점이 드러났다
+- [financedata/opendartreader](notes/financedata__opendartreader.md) — 금감원 Open DART 를 pandas DataFrame 과 dart CLI 로 감싼 무료 MIT 래퍼. 고유번호 변환·주요사항·지분공시는 바로 쓸 수 있지만 재무 표준화·본문 검색·실적 알림은 공백이다
