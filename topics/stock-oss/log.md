@@ -10,3 +10,4 @@
 ## [2026-09-27] judge | 골드 일치율 100% → reports/gold-v1.md
 ## [2026-09-27] judge | 골드 일치율 97% → reports/gold-v1.md
 ## [2026-09-27] judge | 처리 50
+## [2026-09-27] judge | 처리 50

@@ -234,6 +234,7 @@
 {"topic": "stock-oss", "entity_id": 64, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 64, "stage": "triaged", "decision": "exclude", "reason": "other", "sources": null, "decided_at": "2026-09-27T02:56:32+00:00"}
 {"topic": "stock-oss", "entity_id": 65, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:algorithmic-trading\", \"search:topic:trading\", \"search:topic:trading-bot\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 65, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:38:30+00:00"}
 {"topic": "stock-oss", "entity_id": 65, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 65, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:56:32+00:00"}
 {"topic": "stock-oss", "entity_id": 66, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:LLMQuant/awesome-trading-agents\", \"awesome:georgezouq/awesome-ai-in-finance\", \"search:stocks\", \"search:topic:algorithmic-trading\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
@@ -331,6 +332,7 @@
 {"topic": "stock-oss", "entity_id": 112, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:algorithmic-trading\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 112, "stage": "scoped", "decision": "exclude", "reason": "below_threshold", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 113, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:backtest\", \"search:topic:algorithmic-trading\", \"search:topic:trading\", \"search:topic:trading-bot\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 113, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:38:53+00:00"}
 {"topic": "stock-oss", "entity_id": 113, "stage": "scoped", "decision": "include", "reason": "rising", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 113, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:56:32+00:00"}
 {"topic": "stock-oss", "entity_id": 114, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:finance\", \"search:stocks\", \"search:topic:algorithmic-trading\", \"search:topic:finance\", \"search:topic:stock-market\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
@@ -386,11 +388,13 @@
 {"topic": "stock-oss", "entity_id": 139, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:LLMQuant/awesome-trading-agents\", \"search:\\\"trading agent\\\"\", \"search:financial\", \"search:topic:algorithmic-trading\", \"search:topic:fintech\", \"search:topic:quantitative-finance\", \"search:topic:stock-market\", \"search:topic:trading-bot\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 139, "stage": "scoped", "decision": "exclude", "reason": "below_threshold", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 140, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:wilsonfreitas/awesome-quant\", \"search:stocks\", \"search:topic:algorithmic-trading\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 140, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:39:09+00:00"}
 {"topic": "stock-oss", "entity_id": 140, "stage": "scoped", "decision": "include", "reason": "rising", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 140, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:56:32+00:00"}
 {"topic": "stock-oss", "entity_id": 141, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:algorithmic-trading\", \"search:topic:quantitative-finance\", \"search:topic:stock-market\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 141, "stage": "scoped", "decision": "exclude", "reason": "archived", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 142, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:investment\", \"search:quant\", \"search:topic:algorithmic-trading\", \"search:topic:trading-bot\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 142, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:39:24+00:00"}
 {"topic": "stock-oss", "entity_id": 142, "stage": "scoped", "decision": "include", "reason": "rising", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 142, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 143, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:backtest\", \"search:quant\", \"search:topic:algorithmic-trading\", \"search:topic:backtesting\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
@@ -452,6 +456,7 @@
 {"topic": "stock-oss", "entity_id": 171, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:financial\", \"search:topic:algorithmic-trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 171, "stage": "scoped", "decision": "exclude", "reason": "below_threshold", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 172, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"kr:kiwoom\", \"kr:키움 in:readme\", \"search:topic:algorithmic-trading\", \"search:topic:stock\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 172, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:39:40+00:00"}
 {"topic": "stock-oss", "entity_id": 172, "stage": "scoped", "decision": "include", "reason": "kr", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 172, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 173, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:\\\"prediction market\\\"\", \"search:backtest\", \"search:topic:algorithmic-trading\", \"search:topic:quantitative-finance\", \"search:topic:trading-bot\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
@@ -461,6 +466,7 @@
 {"topic": "stock-oss", "entity_id": 175, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:LLMQuant/awesome-trading-agents\", \"search:topic:algorithmic-trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 175, "stage": "scoped", "decision": "exclude", "reason": "below_threshold", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 176, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:\\\"trading agent\\\"\", \"search:financial\", \"search:topic:algorithmic-trading\", \"search:topic:trading-bot\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 176, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:39:59+00:00"}
 {"topic": "stock-oss", "entity_id": 176, "stage": "scoped", "decision": "include", "reason": "rising", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 176, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 177, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:algorithmic-trading\", \"search:topic:backtesting\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
@@ -564,6 +570,7 @@
 {"topic": "stock-oss", "entity_id": 226, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:algorithmic-trading\", \"search:topic:stock-market\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 226, "stage": "scoped", "decision": "exclude", "reason": "below_threshold", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 227, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:algorithmic-trading\", \"search:topic:stock-market\", \"search:topic:trading\", \"search:tradingview\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 227, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:40:17+00:00"}
 {"topic": "stock-oss", "entity_id": 227, "stage": "scoped", "decision": "include", "reason": "rising", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 227, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 228, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:algorithmic-trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
@@ -573,123 +580,158 @@
 {"topic": "stock-oss", "entity_id": 230, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:wilsonfreitas/awesome-quant\", \"search:quant\", \"search:topic:algorithmic-trading\", \"search:topic:trading-bot\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 230, "stage": "scoped", "decision": "exclude", "reason": "below_threshold", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 231, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:georgezouq/awesome-ai-in-finance\", \"awesome:paperswithbacktest/awesome-systematic-trading\", \"awesome:wilsonfreitas/awesome-quant\", \"search:finance\", \"search:quant\", \"search:stocks\", \"search:topic:finance\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 231, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:40:35+00:00"}
 {"topic": "stock-oss", "entity_id": 231, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 231, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 232, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:LLMQuant/awesome-trading-agents\", \"search:\\\"stock analysis\\\"\", \"search:quant\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 232, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:40:55+00:00"}
 {"topic": "stock-oss", "entity_id": 232, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 232, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 233, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:LLMQuant/awesome-trading-agents\", \"awesome:georgezouq/awesome-ai-in-finance\", \"kr:FinanceDataReader in:readme\", \"search:finance\", \"search:quant\", \"search:topic:finance\", \"search:topic:quantitative-finance\", \"search:topic:trading-bot\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 233, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:41:12+00:00"}
 {"topic": "stock-oss", "entity_id": 233, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 233, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 234, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:backtesting\", \"search:topic:quantitative-finance\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 234, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:41:29+00:00"}
 {"topic": "stock-oss", "entity_id": 234, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 234, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 235, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:paperswithbacktest/awesome-systematic-trading\", \"search:backtest\", \"search:investment\", \"search:topic:fintech\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 235, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:41:50+00:00"}
 {"topic": "stock-oss", "entity_id": 235, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 235, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 236, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 236, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 236, "stage": "triaged", "decision": "exclude", "reason": "unrelated", "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 237, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:backtest\", \"search:stocks\", \"search:topic:backtesting\", \"search:topic:quantitative-finance\", \"search:topic:stock\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 237, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:42:08+00:00"}
 {"topic": "stock-oss", "entity_id": 237, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 237, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 238, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:paperswithbacktest/awesome-systematic-trading\", \"awesome:wilsonfreitas/awesome-quant\", \"search:finance\", \"search:topic:finance\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 238, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:42:23+00:00"}
 {"topic": "stock-oss", "entity_id": 238, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 238, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 239, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:LLMQuant/awesome-trading-agents\", \"search:backtest\", \"search:finance\", \"search:quant\", \"search:stocks\", \"search:topic:backtesting\", \"search:topic:finance\", \"search:topic:fintech\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 239, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:42:44+00:00"}
 {"topic": "stock-oss", "entity_id": 239, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 239, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 240, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:A股\", \"search:financial\", \"search:topic:fintech\", \"search:topic:quantitative-finance\", \"search:topic:stock-market\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 240, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:43:04+00:00"}
 {"topic": "stock-oss", "entity_id": 240, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 240, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 241, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:wilsonfreitas/awesome-quant\", \"search:quant\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 241, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:43:21+00:00"}
 {"topic": "stock-oss", "entity_id": 241, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 241, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 242, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:finance\", \"search:financial\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 242, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 242, "stage": "triaged", "decision": "exclude", "reason": "tutorial", "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 243, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:LLMQuant/awesome-trading-agents\", \"search:finance\", \"search:financial\", \"search:quant\", \"search:topic:quantitative-finance\", \"search:topic:stock-market\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 243, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:43:37+00:00"}
 {"topic": "stock-oss", "entity_id": 243, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 243, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 244, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:quant\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 244, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:43:58+00:00"}
 {"topic": "stock-oss", "entity_id": 244, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 244, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 245, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:LLMQuant/awesome-trading-agents\", \"search:finance\", \"search:quant\", \"search:topic:finance\", \"search:topic:quantitative-finance\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 245, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:44:13+00:00"}
 {"topic": "stock-oss", "entity_id": 245, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 245, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 246, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:georgezouq/awesome-ai-in-finance\", \"awesome:paperswithbacktest/awesome-systematic-trading\", \"awesome:wilsonfreitas/awesome-quant\", \"search:finance\", \"search:quant\", \"search:topic:finance\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 246, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:45:05+00:00"}
 {"topic": "stock-oss", "entity_id": 246, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 246, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:58:01+00:00"}
 {"topic": "stock-oss", "entity_id": 247, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:A股\", \"search:quant\", \"search:topic:backtesting\", \"search:topic:quantitative-finance\", \"search:topic:stock\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 247, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:45:26+00:00"}
 {"topic": "stock-oss", "entity_id": 247, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 247, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 248, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:paperswithbacktest/awesome-systematic-trading\", \"awesome:wilsonfreitas/awesome-quant\", \"search:finance\", \"search:investment\", \"search:topic:finance\", \"search:topic:investment\", \"search:topic:quantitative-finance\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 248, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:45:40+00:00"}
 {"topic": "stock-oss", "entity_id": 248, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 248, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 249, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:finance\", \"search:quant\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 249, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:46:02+00:00"}
 {"topic": "stock-oss", "entity_id": 249, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 249, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 250, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:A股\", \"search:financial\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 250, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:46:21+00:00"}
 {"topic": "stock-oss", "entity_id": 250, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 250, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 251, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:\\\"trading agent\\\"\", \"search:A股\", \"search:investment\", \"search:topic:fintech\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 251, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:46:43+00:00"}
 {"topic": "stock-oss", "entity_id": 251, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 251, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 252, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:finance\", \"search:quant\", \"search:topic:finance\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 252, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:46:59+00:00"}
 {"topic": "stock-oss", "entity_id": 252, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 252, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 253, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:finance\", \"search:quant\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 253, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:47:37+00:00"}
 {"topic": "stock-oss", "entity_id": 253, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 253, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 254, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:paperswithbacktest/awesome-systematic-trading\", \"awesome:wilsonfreitas/awesome-quant\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 254, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:47:55+00:00"}
 {"topic": "stock-oss", "entity_id": 254, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 254, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 255, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:georgezouq/awesome-ai-in-finance\", \"awesome:paperswithbacktest/awesome-systematic-trading\", \"awesome:wilsonfreitas/awesome-quant\", \"search:topic:portfolio\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 255, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:48:13+00:00"}
 {"topic": "stock-oss", "entity_id": 255, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 255, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 256, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:wilsonfreitas/awesome-quant\", \"search:finance\", \"search:topic:finance\", \"search:topic:quantitative-finance\", \"search:topic:stock-market\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 256, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:48:28+00:00"}
 {"topic": "stock-oss", "entity_id": 256, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 256, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 257, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:quant\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 257, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 257, "stage": "triaged", "decision": "exclude", "reason": "tutorial", "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 258, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:financial\", \"search:stocks\", \"search:topic:quantitative-finance\", \"search:topic:stock-market\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 258, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:48:43+00:00"}
 {"topic": "stock-oss", "entity_id": 258, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 258, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 259, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:wilsonfreitas/awesome-quant\", \"search:\\\"stock analysis\\\"\", \"search:quant\", \"search:topic:quantitative-finance\", \"search:topic:stock-market\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 259, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 259, "stage": "triaged", "decision": "exclude", "reason": "tutorial", "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 260, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:LLMQuant/awesome-trading-agents\", \"search:finance\", \"search:stocks\", \"search:topic:finance\", \"search:topic:fintech\", \"search:topic:quantitative-finance\", \"search:topic:stock\", \"search:topic:stock-market\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 260, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:49:03+00:00"}
 {"topic": "stock-oss", "entity_id": 260, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 260, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 261, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:wilsonfreitas/awesome-quant\", \"search:finance\", \"search:quant\", \"search:topic:finance\", \"search:topic:quantitative-finance\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 261, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:49:19+00:00"}
 {"topic": "stock-oss", "entity_id": 261, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 261, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 262, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:finance\", \"search:investment\", \"search:quant\", \"search:topic:finance\", \"search:topic:investment\", \"search:topic:quantitative-finance\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 262, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 262, "stage": "triaged", "decision": "exclude", "reason": "tutorial", "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 263, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:wilsonfreitas/awesome-quant\", \"search:backtest\", \"search:stocks\", \"search:topic:backtesting\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 263, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:49:40+00:00"}
 {"topic": "stock-oss", "entity_id": 263, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 263, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 264, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:quantitative-finance\", \"search:tradingview\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 264, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:49:52+00:00"}
 {"topic": "stock-oss", "entity_id": 264, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 264, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 265, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:financial\", \"search:topic:quantitative-finance\", \"search:topic:stock-market\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 265, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:50:17+00:00"}
 {"topic": "stock-oss", "entity_id": 265, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 265, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 266, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:quant\", \"search:topic:quantitative-finance\", \"search:topic:stock\", \"search:topic:stock-market\", \"search:topic:trading\", \"search:tradingview\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 266, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:50:33+00:00"}
 {"topic": "stock-oss", "entity_id": 266, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 266, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T02:59:30+00:00"}
 {"topic": "stock-oss", "entity_id": 267, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:investment\", \"search:quant\", \"search:topic:investment\", \"search:topic:quantitative-finance\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 267, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:50:49+00:00"}
 {"topic": "stock-oss", "entity_id": 267, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 267, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T03:01:02+00:00"}
 {"topic": "stock-oss", "entity_id": 268, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:paperswithbacktest/awesome-systematic-trading\", \"awesome:wilsonfreitas/awesome-quant\", \"search:backtest\", \"search:finance\", \"search:investment\", \"search:quant\", \"search:topic:backtesting\", \"search:topic:finance\", \"search:topic:fintech\", \"search:topic:investment\", \"search:topic:quantitative-finance\", \"search:topic:stock\", \"search:topic:stock-market\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 268, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:51:04+00:00"}
 {"topic": "stock-oss", "entity_id": 268, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 268, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T03:01:02+00:00"}
 {"topic": "stock-oss", "entity_id": 269, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 269, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:51:21+00:00"}
 {"topic": "stock-oss", "entity_id": 269, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 269, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T03:01:02+00:00"}
 {"topic": "stock-oss", "entity_id": 270, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:finance\", \"search:stocks\", \"search:topic:finance\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 270, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:51:36+00:00"}
 {"topic": "stock-oss", "entity_id": 270, "stage": "scoped", "decision": "include", "reason": "famous", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 270, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T03:01:02+00:00"}
 {"topic": "stock-oss", "entity_id": 271, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:quantitative-finance\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
@@ -706,6 +748,7 @@
 {"topic": "stock-oss", "entity_id": 276, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:finance\", \"search:stocks\", \"search:topic:finance\", \"search:topic:fintech\", \"search:topic:quantitative-finance\", \"search:topic:stock-market\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 276, "stage": "scoped", "decision": "exclude", "reason": "below_threshold", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 277, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:A股\", \"search:investment\", \"search:quant\", \"search:topic:fintech\", \"search:topic:investment\", \"search:topic:quantitative-finance\", \"search:topic:stock\", \"search:topic:stock-market\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 277, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:51:54+00:00"}
 {"topic": "stock-oss", "entity_id": 277, "stage": "scoped", "decision": "include", "reason": "rising", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 277, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T03:01:02+00:00"}
 {"topic": "stock-oss", "entity_id": 278, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:finance\", \"search:financial\", \"search:topic:finance\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
@@ -715,6 +758,7 @@
 {"topic": "stock-oss", "entity_id": 280, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:LLMQuant/awesome-trading-agents\", \"awesome:georgezouq/awesome-ai-in-finance\", \"search:finance\", \"search:investment\", \"search:topic:finance\", \"search:topic:investment\", \"search:topic:quantitative-finance\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 280, "stage": "scoped", "decision": "exclude", "reason": "below_threshold", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 281, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:\\\"llm trading\\\"\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 281, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:52:16+00:00"}
 {"topic": "stock-oss", "entity_id": 281, "stage": "scoped", "decision": "include", "reason": "rising", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 281, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T03:01:02+00:00"}
 {"topic": "stock-oss", "entity_id": 282, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
@@ -722,6 +766,7 @@
 {"topic": "stock-oss", "entity_id": 283, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:finance\", \"search:topic:finance\", \"search:topic:fintech\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 283, "stage": "scoped", "decision": "exclude", "reason": "below_threshold", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 284, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"awesome:georgezouq/awesome-ai-in-finance\", \"awesome:wilsonfreitas/awesome-quant\", \"search:topic:backtesting\", \"search:topic:quantitative-finance\", \"search:topic:trading\", \"search:tradingview\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 284, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:52:33+00:00"}
 {"topic": "stock-oss", "entity_id": 284, "stage": "scoped", "decision": "include", "reason": "rising", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 284, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T03:01:02+00:00"}
 {"topic": "stock-oss", "entity_id": 285, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:A股\", \"search:quant\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
@@ -793,6 +838,7 @@
 {"topic": "stock-oss", "entity_id": 318, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:quant\", \"search:topic:quantitative-finance\", \"search:topic:trading\", \"search:topic:trading-bot\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 318, "stage": "scoped", "decision": "exclude", "reason": "below_threshold", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 319, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:A股\", \"search:topic:backtesting\", \"search:topic:fintech\", \"search:topic:quantitative-finance\", \"search:topic:stock-market\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 319, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:52:50+00:00"}
 {"topic": "stock-oss", "entity_id": 319, "stage": "scoped", "decision": "include", "reason": "rising", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 319, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T03:01:02+00:00"}
 {"topic": "stock-oss", "entity_id": 320, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:quantitative-finance\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
@@ -808,9 +854,11 @@
 {"topic": "stock-oss", "entity_id": 325, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:finance\", \"search:financial\", \"search:investment\", \"search:topic:finance\", \"search:topic:investment\", \"search:topic:quantitative-finance\", \"search:topic:stock-market\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 325, "stage": "scoped", "decision": "exclude", "reason": "below_threshold", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 326, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:backtest\", \"search:topic:backtesting\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 326, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:53:03+00:00"}
 {"topic": "stock-oss", "entity_id": 326, "stage": "scoped", "decision": "include", "reason": "rising", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 326, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T03:01:02+00:00"}
 {"topic": "stock-oss", "entity_id": 327, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:backtest\", \"search:topic:backtesting\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 327, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:53:27+00:00"}
 {"topic": "stock-oss", "entity_id": 327, "stage": "scoped", "decision": "include", "reason": "rising", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 327, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T03:01:02+00:00"}
 {"topic": "stock-oss", "entity_id": 328, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:finance\", \"search:topic:finance\", \"search:topic:quantitative-finance\", \"search:topic:trading\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
@@ -822,6 +870,7 @@
 {"topic": "stock-oss", "entity_id": 331, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:financial\", \"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 331, "stage": "scoped", "decision": "exclude", "reason": "below_threshold", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 332, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 332, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:53:45+00:00"}
 {"topic": "stock-oss", "entity_id": 332, "stage": "scoped", "decision": "include", "reason": "rising", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 332, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T03:01:02+00:00"}
 {"topic": "stock-oss", "entity_id": 333, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
@@ -901,6 +950,7 @@
 {"topic": "stock-oss", "entity_id": 370, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
 {"topic": "stock-oss", "entity_id": 370, "stage": "scoped", "decision": "exclude", "reason": "below_threshold", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 371, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
+{"topic": "stock-oss", "entity_id": 371, "stage": "judged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T13:54:00+00:00"}
 {"topic": "stock-oss", "entity_id": 371, "stage": "scoped", "decision": "include", "reason": "rising", "sources": null, "decided_at": "2026-09-27T02:39:08+00:00"}
 {"topic": "stock-oss", "entity_id": 371, "stage": "triaged", "decision": "include", "reason": null, "sources": null, "decided_at": "2026-09-27T03:01:02+00:00"}
 {"topic": "stock-oss", "entity_id": 372, "stage": "identified", "decision": "include", "reason": null, "sources": "[\"search:topic:quantitative-finance\"]", "decided_at": "2026-09-27T01:37:47+00:00"}
