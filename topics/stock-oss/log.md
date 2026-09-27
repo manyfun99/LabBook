@@ -8,3 +8,4 @@
 ## [2026-09-27] triage | 처리 200
 ## [2026-09-27] triage | 처리 154
 ## [2026-09-27] judge | 골드 일치율 100% → reports/gold-v1.md
+## [2026-09-27] judge | 골드 일치율 97% → reports/gold-v1.md
