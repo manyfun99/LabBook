@@ -96,17 +96,16 @@ def funnel(conn, topic, topic_dir, date):
 
 def _suspects(conn, topic, included):
     """범위 내 레포 중 최신 스냅샷 플래그나 판정 증거(인젝션·바이너리 링크)가 선 것."""
-    flagged = set()
-    for eid in included:
-        snap = conn.execute("SELECT flags FROM snapshot WHERE entity_id = ? ORDER BY taken_at DESC LIMIT 1",
-                            (eid,)).fetchone()
-        if snap and json.loads(snap["flags"] or "[]"):
-            flagged.add(eid)
-            continue
-        for (ev,) in conn.execute("SELECT evidence FROM judgment WHERE topic = ? AND entity_id = ?", (topic, eid)):
-            e = json.loads(ev or "{}")
-            if e.get("injection_suspect") or e.get("binary_link"):
-                flagged.add(eid)
+    ids = json.dumps(sorted(included))  # 범위 내 레포만 훑는다 — 다른 토픽·범위 밖 행은 읽지 않는다
+    # NULL 과 '' 는 빈 값으로 본다 — 예전 json.loads(x or "[]") 와 같게
+    flagged = {r[0] for r in conn.execute(
+        "SELECT s.entity_id FROM snapshot s WHERE s.entity_id IN (SELECT value FROM json_each(?)) "
+        "AND s.taken_at = (SELECT MAX(taken_at) FROM snapshot WHERE entity_id = s.entity_id) "
+        "AND json_array_length(COALESCE(NULLIF(s.flags, ''), '[]')) > 0", (ids,))}
+    flagged |= {r[0] for r in conn.execute(
+        "SELECT entity_id FROM judgment WHERE topic = ? AND entity_id IN (SELECT value FROM json_each(?)) "
+        "AND (json_extract(NULLIF(evidence, ''), '$.injection_suspect') "
+        "OR json_extract(NULLIF(evidence, ''), '$.binary_link'))", (topic, ids))}
     return len(flagged)
 
 

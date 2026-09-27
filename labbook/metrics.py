@@ -3,8 +3,8 @@ import datetime
 import json
 
 from labbook.collect import upsert_entity
-from labbook.db import utc_now
-from labbook.github import GitHubError, NotFound, normalize_repo
+from labbook.db import set_screening
+from labbook.github import GitHubError, NotFound
 
 SPIKE_SHARE = 0.7        # 3일에 30일 증가분의 70% 이상
 SPIKE_MIN_D30 = 30       # 30일 증가가 이보다 작으면 급등을 보지 않는다 (소수 스타의 우연한 몰림)
@@ -74,7 +74,7 @@ def refresh(conn, gh, config, today=None):
                 try:
                     snap = _take_snapshot(conn, gh, row, today)
                 except NotFound:
-                    _set_scope(conn, topic, row["id"], "exclude", "gone")
+                    set_screening(conn, topic, row["id"], "scoped", "exclude", "gone")
                     counts["exclude"] += 1
                     continue
                 except GitHubError:
@@ -83,14 +83,13 @@ def refresh(conn, gh, config, today=None):
                     continue
                 counts["fetched"] += 1
             decision, reason = scope(snap, json.loads(row["sources"]), cfg)
-            _set_scope(conn, topic, row["id"], decision, reason)
+            set_screening(conn, topic, row["id"], "scoped", decision, reason)
             counts[decision] += 1
     return counts
 
 
 def _take_snapshot(conn, gh, row, today):
-    # gh_id 로 조회 — 이름 변경에 강하고, 삭제된 레포의 이름을 다른 레포가 쓰는 경우에도 엉뚱한 레포를 보지 않는다
-    repo = normalize_repo(gh.get(f"repositories/{row['gh_id']}"))
+    repo = gh.repo_by_id(row["gh_id"])
     upsert_entity(conn, repo)
     try:
         days = daily_counts(gh.get(f"repositories/{row['gh_id']}/stargazers/history") or [], today)
@@ -114,11 +113,3 @@ def _delta_from_snapshots(conn, entity_id, today, stars, n):
         "SELECT stars FROM snapshot WHERE entity_id = ? AND taken_at BETWEEN ? AND ? ORDER BY taken_at DESC LIMIT 1",
         (entity_id, lo, hi)).fetchone()
     return None if prev is None or prev["stars"] is None or stars is None else stars - prev["stars"]
-
-
-def _set_scope(conn, topic, entity_id, decision, reason):
-    conn.execute(
-        "INSERT INTO screening (topic, entity_id, stage, decision, reason, decided_at) VALUES (?, ?, 'scoped', ?, ?, ?) "
-        "ON CONFLICT (topic, entity_id, stage) DO UPDATE SET decision = excluded.decision, reason = excluded.reason, "
-        "decided_at = excluded.decided_at",
-        (topic, entity_id, decision, reason, utc_now()))

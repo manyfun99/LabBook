@@ -1,11 +1,12 @@
 import json
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
 
 from labbook import db, judge
-from labbook.github import GitHubError, NotFound
-from labbook.llm import LLMError
+from labbook.github import GitHub, GitHubError, NotFound
+from labbook.llm import ATTEMPTS, LLMError, run_claude
 
 CONFIG = {"topic": "t", "rubric_version": "v1",
           "triage": {"model": "sonnet", "batch": 20, "readme_chars": 2000},
@@ -17,6 +18,8 @@ class FakeGH:
         self.readmes = readmes or {}
         self.broken = broken or {}   # gh_id → 던질 예외
         self.calls = []
+
+    repo_by_id = GitHub.repo_by_id  # 실제 메서드를 빌려 get 을 거치게 한다
 
     def get(self, path):
         self.calls.append(path)
@@ -40,27 +43,31 @@ class FakeGH:
 
 
 class FakeLLM:
-    """run_claude 대역 — 응답을 순서대로 내고, 실제처럼 validate 실패 시 한 번 더 시도한다."""
+    """실제 run_claude 에 가짜 claude 프로세스를 물린다 — 재시도·검증·모델 ID 규칙은 llm.py 것을 그대로 탄다.
+
+    responder(prompt, attempt) 가 구조화 출력을 돌려주면 성공 응답, 예외를 돌려주면 비정상 종료로 흉내 낸다.
+    """
 
     def __init__(self, responder):
         self.responder = responder
-        self.prompts = []
+        self.prompts = []   # llm_call 단위 (재시도는 세지 않는다)
+        self.runs = 0       # 프로세스 호출 단위
 
     def __call__(self, prompt, schema, model, *, validate=None):
         self.prompts.append((prompt, model))
-        last = None
-        for attempt in range(2):
-            out = self.responder(prompt, attempt)
+        attempts = iter(range(ATTEMPTS))
+
+        def runner(args, *, input, **kwargs):
+            self.runs += 1
+            out = self.responder(input, next(attempts))
             if isinstance(out, Exception):
-                last = out
-                continue
-            try:
-                if validate:
-                    validate(out)
-                return out, f"model-{model}"
-            except ValueError as e:
-                last = e
-        raise LLMError(str(last))
+                return subprocess.CompletedProcess(args, 1, stdout="", stderr=str(out))
+            body = {"is_error": False, "structured_output": out,
+                    "modelUsage": {f"model-{model}": {"outputTokens": 1}}}
+            return subprocess.CompletedProcess(args, 0, stdout=json.dumps(body), stderr="")
+
+        return run_claude(prompt, schema, model, validate=validate, runner=runner,
+                          cwd=Path(tempfile.gettempdir()))  # 이미 있는 디렉터리 — mkdir 부작용 없음
 
 
 def triage_all_include(prompt, attempt):
@@ -204,6 +211,14 @@ class TriageFailureTest(Base):
         self.assertEqual(self.screening("triaged")[1][0], "error")
         self.assertEqual(self.screening("triaged")[2], ("include", None))
 
+    def test_묶음의_레포가_모두_GitHub_오류면_LLM을_부르지_않는다(self):
+        self.add(1)
+        self.add(2)
+        llm = FakeLLM(triage_all_include)
+        judge.triage(self.conn, FakeGH(broken={1: NotFound("x"), 2: GitHubError("x")}), CONFIG, llm_call=llm)
+        self.assertEqual(llm.prompts, [])
+        self.assertEqual(self.screening("triaged"), {1: ("error", "github: x"), 2: ("error", "github: x")})
+
 
 class JudgeTest(Base):
     def test_레포_하나의_GitHub_오류는_그_레포만_error로_두고_계속한다(self):
@@ -268,7 +283,9 @@ class JudgeTest(Base):
             out["evidence"]["N"] = "입력에 없는 문장"
             return out
 
-        judge.judge(self.conn, FakeGH(), CONFIG, self.topic_dir, llm_call=FakeLLM(fabricated))
+        llm_call = FakeLLM(fabricated)
+        judge.judge(self.conn, FakeGH(), CONFIG, self.topic_dir, llm_call=llm_call)
+        self.assertEqual(llm_call.runs, ATTEMPTS)
         self.assertEqual(self.screening("judged")[1][0], "error")
         self.assertEqual(self.conn.execute("SELECT COUNT(*) FROM judgment").fetchone()[0], 0)
         judge.judge(self.conn, FakeGH(), CONFIG, self.topic_dir, llm_call=FakeLLM(full_ok))

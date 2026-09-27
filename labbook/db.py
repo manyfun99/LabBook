@@ -49,6 +49,15 @@ def _statements(script):
     return out
 
 
+def set_screening(conn, topic, entity_id, stage, decision, reason):
+    """단계 판정 upsert — scoped 는 refresh 마다, triaged·judged 는 error 재시도 때 덮어쓴다 (sources 는 건드리지 않음)."""
+    conn.execute(
+        "INSERT INTO screening (topic, entity_id, stage, decision, reason, decided_at) VALUES (?, ?, ?, ?, ?, ?) "
+        "ON CONFLICT (topic, entity_id, stage) DO UPDATE SET decision = excluded.decision, reason = excluded.reason, "
+        "decided_at = excluded.decided_at",
+        (topic, entity_id, stage, decision, reason, utc_now()))
+
+
 def utc_now():
     return datetime.datetime.now(datetime.UTC).isoformat(timespec="seconds")
 

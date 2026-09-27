@@ -16,6 +16,7 @@ class FakeGitHub:
         self.awesome = awesome or {}
         self.star_list = starred or []
         self.search_calls = []
+        self.truncated = []  # 실제 GitHub 처럼 항상 있다
 
     def search_repos(self, query, min_stars):
         self.search_calls.append((query, min_stars))
@@ -111,6 +112,12 @@ class CollectTest(unittest.TestCase):
         summary = collect.collect(self.conn, gh, CONFIG)
         self.assertEqual(summary["entities"], 2)
         self.assertEqual(summary["by_source"]["search:topic:a"], 1)
+
+    def test_잘린_검색을_요약에_넘긴다(self):
+        gh = FakeGitHub()
+        gh.truncated = [("kw stars:100..199 created:2026-01-01..2026-12-31", 1400)]
+        self.assertEqual(collect.collect(self.conn, gh, CONFIG)["truncated"], gh.truncated)
+        self.assertEqual(collect.collect(self.conn, FakeGitHub(), CONFIG)["truncated"], [])
 
 
 if __name__ == "__main__":
