@@ -9,7 +9,8 @@
   ],
   "keyword_queries": [
     "\"llm trading\"", "\"ai hedge fund\"", "\"stock analysis\"", "\"trading agent\"", "\"financial agent\"",
-    "quant", "backtest", "\"stock mcp\"", "\"finance mcp\"", "\"trading skills\"", "\"prediction market\""
+    "quant", "backtest", "\"stock mcp\"", "\"finance mcp\"", "\"trading skills\"", "\"prediction market\"",
+    "finance", "financial", "stocks", "investment", "tradingview", "A股"
   ],
   "kr_queries": [
     "topic:kospi", "pykrx", "FinanceDataReader", "OpenDartReader", "한국투자증권", "키움", "주식 자동매매",
