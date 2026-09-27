@@ -1,0 +1,20 @@
+{"repo":"virattt/ai-hedge-fund","P":3,"I":3,"N":5,"T":5,"note":"설치 쉬우나 Financial Datasets 키 필요·미국만. 대가 페르소나 에이전트는 GuruNote 에 바로 차용. 성과 주장 없고 백테스트 누출 완화 명시"}
+{"repo":"TauricResearch/TradingAgents","P":3,"I":3,"N":4,"T":2,"note":"무료 데이터로 돌아가나 LLM 키·설정 필요. 역할 분담 토론 구조는 이미 흔해짐. 논문 성과가 재현 안 된다는 이슈, 누출 대책은 최근 추가"}
+{"repo":"HKUDS/Vibe-Trading","P":4,"I":3,"N":4,"T":4,"note":"pip 설치·무료 데이터·KRX 백테스트 엔진·Web UI. 한국 증권사 커넥터 없음. 수익 주장 대신 검증 가능한 실행 기록을 내세움"}
+{"repo":"HKUDS/AI-Trader","P":2,"I":2,"N":3,"T":3,"note":"에이전트끼리 매매하는 호스팅 플랫폼이라 내 리서치 도구는 아님. SKILL.md 로 에이전트 가입시키는 방식은 참고. 라이브 리더보드는 있으나 백테스트·누출 근거 요구 이슈"}
+{"repo":"dragon1086/prism-insight","P":3,"I":3,"N":5,"T":5,"note":"한국 시장·텔레그램 리포트로 GuruNote 인접 경쟁자. 설정은 키가 많아 무거움. Stance 의 무소급 공개 기록·서버 봉인 판단 시각은 포워드 성적표 아이디어로 그대로 차용 가능"}
+{"repo":"Nunchi-trade/auto-researchtrading","P":1,"I":1,"N":3,"T":1,"note":"하이퍼리퀴드 무기한 선물이라 내 투자와 무관. autoresearch 루프 적용은 참고. Sharpe 21.4 주장에 look-ahead·표본 외 붕괴 이슈"}
+{"repo":"Y-Research-SBU/QuantHarness","P":2,"I":2,"N":3,"T":2,"note":"고빈도·단기 차트 분석이라 중장기와 안 맞음. 차트 이미지를 비전 LLM 으로 읽는 패턴 에이전트는 부분적 신기법. 독립 감사가 기여도 재현 실패"}
+{"repo":"shiyu-coder/Kronos","P":2,"I":2,"N":4,"T":3,"note":"공개 가중치로 예측은 돌릴 수 있으나 중장기 리서치 가치는 낮음. OHLCV 토큰화 파운데이션 모델은 새 기법. 논문 평가는 있으나 동전 던지기보다 나은지 의문 이슈"}
+{"repo":"666ghj/MiroFish","P":1,"I":2,"N":3,"T":2,"note":"주식 전용이 아닌 범용 여론 시뮬레이션이고 Zep 비용 부담. 비개발자 설치 오류·비용 불만은 있으나 금융 수요는 아님. 예측 주장만 있고 평가 없음"}
+{"repo":"financial-datasets/mcp-server","P":2,"I":2,"N":2,"T":5,"note":"유료 API 키 필요·미국만. 흔한 MCP 래퍼. 데이터 도구라 성과 주장 없음"}
+{"repo":"FinanceData/FinanceDataReader","P":5,"I":3,"N":3,"T":5,"note":"무료로 한국·미국 가격·지수·재무를 CLI 로 바로 조회. KRX 변경으로 자주 깨지는 이슈는 안정적 한국 데이터 수요 신호. 데이터 도구"}
+{"repo":"koala73/worldmonitor","P":3,"I":4,"N":4,"T":5,"note":"호스팅 사이트로 거시·지정학 파악에 무료 사용 가능하나 종목 리서치는 아님. Pro 버전·대기자 요청 이슈로 호스팅 수요 확인, 한국어판 없음. AI 브리프·국가 불안정 지수 구성 차용 가능"}
+{"repo":"microsoft/qlib","P":2,"I":1,"N":4,"T":3,"note":"데이터 스크립트부터 깨지는 이슈가 많고 ML 퀀트 연구용. Alpha158 팩터·RD-Agent 팩터 발굴은 차용 가치. 표준 백테스트 벤치마크 공개"}
+{"repo":"ZhuLinsen/daily_stock_analysis","P":4,"I":4,"N":5,"T":2,"note":"한국·미국 주식 포함, GitHub Actions 로 무료 매일 분석 후 텔레그램 푸시. 비개발자 대상 5분 배포 안내·65k★, 한국어판 없음. 결정 대시보드·무료 소스 폴백·Actions 스케줄은 GuruNote 에 직접 차용. 매매 시점 제시에 검증 근거 없음"}
+{"repo":"OpenBB-finance/OpenBB","P":4,"I":2,"N":4,"T":5,"note":"pip 설치 후 무료 공급자로 미국 데이터 바로 조회(일부 공급자는 키 필요, 한국 없음). 분석가·개발자 대상. 한 번 연결해 Python·MCP·REST 로 내보내는 공급자 추상화 차용 가능"}
+{"repo":"Fincept-Corporation/FinceptTerminal","P":2,"I":3,"N":2,"T":5,"note":"설치 실패·데이터 없음 이슈가 상위이고 유료 판매 광고 위주. 비개발자 수요는 있으나 대체재 많음. 기능 묶음 이상의 설계는 약함. 성과 주장 없음"}
+{"repo":"freqtrade/freqtrade","P":1,"I":1,"N":3,"T":5,"note":"크립토 봇이라 내 투자와 무관, 개발자 대상 성숙 시장. 드라이런·하이퍼옵트·텔레그램 제어는 부분 참고. 도구라 성과 주장 없음"}
+{"repo":"myhhub/stock","P":1,"I":2,"N":3,"T":3,"note":"A주 전용. 중국 비개발자의 배포 오류(빈 화면·Docker)는 호스팅 수요지만 한국과 무관. 200조건 스크리너·K선 형태 61종 구성은 부분 참고. 선택 검증 백테스트는 있으나 근거 수치 없음"}
+{"repo":"ccxt/ccxt","P":1,"I":1,"N":4,"T":5,"note":"크립토 거래소 API 라 내 투자와 무관, 개발자 전용. 100여 거래소를 하나의 API 로 정규화한 설계는 한국 증권사 통합 API 아이디어로 차용 가능. 성과 주장 없음"}
+{"repo":"nautechsystems/nautilus_trader","P":1,"I":1,"N":4,"T":5,"note":"프로덕션 매매 엔진이라 개인 리서치 용도 아님, 개발자 전용. 백테스트·라이브 동일 코드의 결정론적 이벤트 구조는 차용 가치. 인프라라 성과 주장 없음"}
