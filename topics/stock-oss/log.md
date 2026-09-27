@@ -28,3 +28,8 @@
 ## [2026-09-27] deep-dive | ranaroussi/quantstats
 ## [2026-09-27] deep-dive | shashankvemuri/finance
 ## [2026-09-27] deep-dive | dgunning/edgartools
+## [2026-09-27] deep-dive | arvinlovegood/go-stock
+## [2026-09-27] deep-dive | mathieu2301/tradingview-api
+## [2026-09-27] deep-dive | virattt/ai-hedge-fund
+## [2026-09-27] deep-dive | valuecell-ai/valuecell
+## [2026-09-27] deep-dive | wbh604/uzi-skill
