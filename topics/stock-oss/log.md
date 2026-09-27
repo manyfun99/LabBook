@@ -23,3 +23,8 @@
 ## [2026-09-27] select | 심층분석 19개 확정
 ## [2026-09-27] select-review | 그대로 확정 · add koala73/worldmonitor, dragon1086/prism-insight, hkuds/vibe-trading, chrisryugj/korean-dart-mcp (사용자 선택)
 ## [2026-09-27] funnel | reports/funnel-2026-09-27.md
+## [2026-09-27] deep-dive | openbb-finance/openbb
+## [2026-09-27] deep-dive | ranaroussi/yfinance
+## [2026-09-27] deep-dive | ranaroussi/quantstats
+## [2026-09-27] deep-dive | shashankvemuri/finance
+## [2026-09-27] deep-dive | dgunning/edgartools
