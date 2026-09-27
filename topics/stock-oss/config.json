@@ -13,7 +13,9 @@
   ],
   "kr_queries": [
     "topic:kospi", "pykrx", "FinanceDataReader", "OpenDartReader", "한국투자증권", "키움", "주식 자동매매",
-    "코스피 in:readme", "코스닥 in:readme", "\"한국 주식\" in:readme"
+    "코스피 in:readme", "코스닥 in:readme", "\"한국 주식\" in:readme",
+    "pykrx in:readme", "FinanceDataReader in:readme", "OpenDartReader in:readme",
+    "한국투자증권 in:readme", "키움 in:readme", "kiwoom", "자동매매 in:readme", "주식 in:readme"
   ],
   "awesome_lists": [
     "wilsonfreitas/awesome-quant", "georgezouq/awesome-ai-in-finance", "paperswithbacktest/awesome-systematic-trading",
