@@ -38,3 +38,7 @@
 ## [2026-09-27] deep-dive | 666ghj/mirofish
 ## [2026-09-27] deep-dive | financedata/financedatareader
 ## [2026-09-27] deep-dive | financedata/opendartreader
+## [2026-09-27] deep-dive | koala73/worldmonitor
+## [2026-09-27] deep-dive | dragon1086/prism-insight
+## [2026-09-27] deep-dive | hkuds/vibe-trading
+## [2026-09-27] deep-dive | chrisryugj/korean-dart-mcp
