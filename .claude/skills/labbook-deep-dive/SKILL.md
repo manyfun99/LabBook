@@ -17,8 +17,8 @@ WHERE sc.topic = '<주제>' AND sc.stage = 'deep' AND sc.decision = 'include';
 ```
 
 - 노트 경로는 `topics/<주제>/notes/<owner>__<repo>.md` 다. `<owner>__<repo>` 는 `entity.key` 에서 `github:` 를 뗀 **소문자** 값이다(GitHub 표시명을 쓰지 않는다).
-- 완료 기준은 `index.md` 의 카탈로그 줄이다. 노트만 있고 줄이 없으면 신호 적재가 끝나지 않은 것이므로, 조사를 다시 하지 않고 검수·적재(출력 2~4)부터 이어서 한다.
-- 판정 기록: 점수·요약·`judged_at` 은 `v_repo_latest` 에, 축별 근거 인용은 `judgment.evidence`(`stage = 'full'`)에 있다. 정밀 판정이 없는 레포(1단 제외 뒤 `--add` 된 것)는 `judgment(stage = 'triage')` 를 맥락으로 본다.
+- 완료 기준은 `index.md` 의 카탈로그 줄이다. 노트만 있고 줄이 없으면 신호 적재가 끝나지 않은 것이므로, 조사를 다시 하지 않고 검수·적재(출력 2~4)부터 이어서 한다. 단 신호 파일의 행 수(파일이 없으면 0)가 노트 "수요 신호" 절 끝의 `신호 N개` 와 다르거나 그 줄이 없으면 신호 파일이 덜 쓰인 것이다. 그 레포는 조사부터 다시 한다(기존 clone 은 재사용).
+- 판정 기록: 점수·요약·`judged_at` 은 `v_repo_latest` 에, 축별 근거 인용은 `judgment.evidence`(`stage = 'full'`)에 있다. 정밀 판정이 없는 레포(1단 제외 뒤 `--add` 된 것)는 `judgment(stage = 'triage')` 를 맥락으로 본다. 1단 판정도 없는 레포(범위 컷으로 빠진 뒤 `--add` 된 것)는 `screening` 의 `scoped` 사유와 최신 `snapshot` 만 맥락으로 주고, frontmatter·T 는 판정 없음과 같이 쓴다.
 
 ## 지킬 것
 
@@ -36,7 +36,7 @@ WHERE sc.topic = '<주제>' AND sc.stage = 'deep' AND sc.decision = 'include';
 - 이슈: 반응순 상위 30개와 댓글순 상위 30개. 열린 것·닫힌 것 모두 본다.
   `gh api -X GET search/issues -f q='repo:<owner>/<repo> is:issue' -f sort=reactions -f per_page=30 --jq '.items[] | {url: .html_url, title, comments, reactions: .reactions.total_count}'`
   (`-f sort=comments` 도 같은 식. `gh search issues --json` 에는 반응 수 필드가 없다)
-- Discussions: 켜져 있으면 GraphQL `discussions(first: 50, orderBy: {field: UPDATED_AT, direction: DESC})` 로 받아 `upvoteCount` + 댓글 수 상위 10개를 본다. 반응순 정렬은 GraphQL 에 없다.
+- Discussions: 켜져 있으면 GraphQL `discussions(first: 100, orderBy: {field: UPDATED_AT, direction: DESC})` 를 `pageInfo.endCursor` 로 끝까지(많으면 300개까지) 받아 `upvoteCount` + 댓글 수 상위 10개를 본다. 반응순 정렬은 GraphQL 에 없어서, 최근 것만 보면 오래된 인기 토론을 놓친다. 토론 하나의 댓글도 100개를 넘을 수 있으니(246개 사례) `comments` 를 커서로 끝까지 받는다.
 - 포크: ★순 상위 10개 (`gh api 'repos/<owner>/<repo>/forks?sort=stargazers&per_page=10'`).
 - 상용 파생(이 레포를 감싼 유료 서비스)을 찾는 웹 검색: 3회 이내.
 - 코드: 구조 파악에 필요한 만큼만 읽는다.
@@ -53,7 +53,7 @@ WHERE sc.topic = '<주제>' AND sc.stage = 'deep' AND sc.decision = 'include';
   2. 면책 문구는 따로 적는다. "연구용", "투자 조언 아님"은 성과 주장이 없다는 근거가 아니다. 1에서 주장이 하나라도 나오면, 면책 문구가 있어도 "성과를 주장하지 않는 도구"(5점)로 보지 않는다.
   3. 검증 수단 — 백테스트 기간·종목 수, 수수료·슬리피지, look-ahead·생존 편향 대책, LLM 학습 컷오프 이후 구간, 포워드·페이퍼 기록이 각각 있는지 없는지 적는다.
   4. 판정 — `topics/<주제>/rubric-v1.md` 의 T 앵커(1·3·5)로 `t_deep` 을 매기고, 절 끝에 `심층 T n (판정 T m) — 한 줄 사유` 를 적는다. 차이가 2 이상이면 ⚠ 를 붙인다. 판정이 없으면 `(판정 T -)`.
-- **수요 신호**: 댓글·반응이 많은 이슈. 특히 호스팅 버전 요청, 한국 시장·한국어 지원 요청, API 비용 불만, 설치 어려움. 버그 보고를 신호 수를 채우려고 `pain` 으로 넣지 않는다. 신호가 없으면 "없음"과 사유를 적는다.
+- **수요 신호**: 댓글·반응이 많은 이슈. 특히 호스팅 버전 요청, 한국 시장·한국어 지원 요청, API 비용 불만, 설치 어려움. 버그 보고를 신호 수를 채우려고 `pain` 으로 넣지 않는다. 신호가 없으면 "없음"과 사유를 적는다. 절 끝에 신호 파일의 행 수를 `신호 N개` 로 적는다(재개 때 파일이 다 쓰였는지 확인하는 값이다).
 - **파생·상용화**: 인기 포크, 이 레포를 감싼 유료 서비스
 - **내 투자에 쓰려면**: 실행 방법과 주의점
 - **인디 관점**: 공백과 차용할 부분
@@ -88,28 +88,51 @@ tags: [category, …]
 
 - `kind`: `demand`(원하는 것), `pain`(불만·고통), `gap`(아무도 안 하는 것).
 - `weight`: 이슈·토론이면 반응 합계 + 댓글 수, 댓글이면 그 댓글의 반응 합계, README 면 0.
-- `source_url`: 인용이 실제로 있는 가장 좁은 위치. 댓글이면 `…/issues/<n>#issuecomment-<id>`, README 면 `…/blob/<clone 의 HEAD sha>/README.md`.
+- `source_url`: 인용이 실제로 있는 가장 좁은 위치. 댓글이면 `…/issues/<n>#issuecomment-<id>`, README 면 `…/blob/<clone 의 HEAD sha>/README.md`. 보강·재조사 때는 기존 clone 을 재사용한다. 다시 clone 하면 sha 가 바뀌어 같은 README 인용이 다른 행으로 한 번 더 들어간다.
 
-인용이 원문에 있는지 대조한 뒤, 레포 루트에서 파라미터 바인딩으로 적재한다. 같은 인용은 다시 넣어도 중복되지 않는다.
+적재 전에 인용을 원문과 대조한다(공백을 정규화한 부분 문자열 일치).
+
+| 출처 | 대조 대상 |
+|---|---|
+| `…/issues/<n>` · `…/pull/<n>` | `gh api repos/<r>/issues/<n>` 의 제목+본문 |
+| `…#issuecomment-<id>` | `gh api repos/<r>/issues/comments/<id>` 의 본문 |
+| `…/discussions/<n>`(`#discussioncomment-<id>`) | GraphQL `discussion(number)` 의 제목+본문+모든 댓글·답글(커서로 끝까지) |
+| `…/blob/<ref>/<path>` | `.cache/repos/<owner>__<repo>/<path>` |
+| 그 밖 | 하나씩 열어 확인 |
+
+같은 단계에서 이메일(`[\w.+-]+@[\w-]+\.[\w.-]+`), 전화번호, 키 형태(`sk-…`·`gh[pousr]_…`·`AKIA…`·32자 이상 hex)의 인용을 뽑아, 버리거나 그 부분을 뺀 연속 구절로 줄인다. 불일치나 개인정보가 하나라도 남으면 적재하지 않는다.
+
+그다음 레포 루트에서 파라미터 바인딩으로 적재한다. 같은 인용은 다시 넣어도 중복되지 않는다. 출력의 `파일`·`신규` 가 다르면 줄 사이에 중복이 있거나(같은 URL·인용인데 kind 만 다른 줄 등) 이미 적재된 줄이 있는 것이다. 그 줄을 확인한다.
 
 ```sh
 python3 - labbook.db <주제> <entity_id> .cache/signals/<owner>__<repo>.jsonl <<'EOF'
-import json, sqlite3, sys
-from labbook.db import utc_now
+import json, sys
+from pathlib import Path
+from labbook.db import connect, utc_now
 db, topic, entity_id, path = sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4]
-conn = sqlite3.connect(db)
-with conn, open(path) as f:
-    for line in filter(str.strip, f):
-        s = json.loads(line)
-        assert s["kind"] in ("demand", "pain", "gap"), s
+if not Path(db).exists():
+    sys.exit(f"DB 없음: {db} — 레포 루트에서 실행한다")
+conn = connect(db)
+# INSERT OR IGNORE 는 FK 위반도 조용히 건너뛰므로 entity 를 먼저 확인한다
+key = conn.execute("SELECT key FROM entity WHERE id = ?", (entity_id,)).fetchone()
+if key is None:
+    sys.exit(f"entity 없음: {entity_id}")
+print(key[0])  # 신호 파일 이름의 레포와 같은지 눈으로 확인한다
+lines = [json.loads(l) for l in open(path) if l.strip()]
+with conn:
+    before = conn.total_changes
+    for s in lines:
+        assert s["kind"] in ("demand", "pain", "gap") and s["quote"] and s["source_url"], s
         conn.execute("INSERT OR IGNORE INTO signal (topic, entity_id, kind, quote, source_url, weight, found_at) "
                      "VALUES (?, ?, ?, ?, ?, ?, ?)",
                      (topic, entity_id, s["kind"], s["quote"], s["source_url"], s["weight"], utc_now()))
-print(conn.execute("SELECT COUNT(*) FROM signal WHERE entity_id = ?", (entity_id,)).fetchone()[0])
+    new = conn.total_changes - before
+total = conn.execute("SELECT COUNT(*) FROM signal WHERE topic = ? AND entity_id = ?", (topic, entity_id)).fetchone()[0]
+print(f"파일 {len(lines)} · 신규 {new} · 레포 누적 {total}")
 EOF
 ```
 
-3. `topics/<주제>/log.md` 에 `## [YYYY-MM-DD] deep-dive | owner/repo` 를 추가한다.
+3. `topics/<주제>/log.md` 에 `## [YYYY-MM-DD] deep-dive | owner/repo` 를 추가한다. 이미 같은 줄이 있으면(재개) 넣지 않는다. 날짜는 `labbook` 의 자동 로그와 같은 UTC 기준이다(`python3 -c "from labbook.db import utc_today; print(utc_today())"`).
 4. 마지막으로 `topics/<주제>/index.md` 에 노트 한 줄 카탈로그 `- [owner/repo](notes/owner__repo.md) — 한 줄 요약` 을 추가한다. 이 줄이 완료 표시다.
 
 ## 여러 레포를 배치로 돌릴 때
