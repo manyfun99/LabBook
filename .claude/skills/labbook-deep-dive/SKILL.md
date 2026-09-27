@@ -17,7 +17,7 @@ WHERE sc.topic = '<주제>' AND sc.stage = 'deep' AND sc.decision = 'include';
 ```
 
 - 노트 경로는 `topics/<주제>/notes/<owner>__<repo>.md` 다. `<owner>__<repo>` 는 `entity.key` 에서 `github:` 를 뗀 **소문자** 값이다(GitHub 표시명을 쓰지 않는다).
-- 완료 기준은 `index.md` 의 카탈로그 줄이다. 노트만 있고 줄이 없으면 신호 적재가 끝나지 않은 것이므로, 조사를 다시 하지 않고 검수·적재(출력 2~4)부터 이어서 한다. 단 신호 파일의 행 수(파일이 없으면 0)가 노트 "수요 신호" 절 끝의 `신호 N개` 와 다르거나 그 줄이 없으면 신호 파일이 덜 쓰인 것이다. 그 레포는 조사부터 다시 한다(기존 clone 은 재사용).
+- 완료 기준은 `index.md` 의 카탈로그 줄이다. 노트만 있고 줄이 없으면 신호 적재가 끝나지 않은 것이므로, 조사를 다시 하지 않고 검수·적재(출력 2~4)부터 이어서 한다. 단 신호 파일의 빈 줄을 뺀 줄 수(`grep -c . <파일>`, 파일이 없으면 0)가 노트 "수요 신호" 절 끝의 `신호 N개` 와 다르거나 그 줄이 없으면 신호 파일이 덜 쓰인 것이다. 그 레포는 기존 신호 파일을 지우고 조사부터 다시 한다(clone 은 재사용). 카탈로그 줄이 이미 있는 노트에는 이 확인을 하지 않는다.
 - 판정 기록: 점수·요약·`judged_at` 은 `v_repo_latest` 에, 축별 근거 인용은 `judgment.evidence`(`stage = 'full'`)에 있다. 정밀 판정이 없는 레포(1단 제외 뒤 `--add` 된 것)는 `judgment(stage = 'triage')` 를 맥락으로 본다. 1단 판정도 없는 레포(범위 컷으로 빠진 뒤 `--add` 된 것)는 `screening` 의 `scoped` 사유와 최신 `snapshot` 만 맥락으로 주고, frontmatter·T 는 판정 없음과 같이 쓴다.
 
 ## 지킬 것
@@ -80,7 +80,7 @@ tags: [category, …]
 
 판정이 없는 레포는 `judged: -  rubric: -` 로 둔다.
 
-2. 수요 신호. `.cache/signals/<owner>__<repo>.jsonl` 에 한 줄에 하나씩 쓴다.
+2. 수요 신호. `.cache/signals/<owner>__<repo>.jsonl` 에 한 줄에 하나씩 쓴다. 파일은 조사할 때마다 새로 쓴다(이전 파일에 이어 붙이지 않는다).
 
 ```json
 {"kind": "demand", "quote": "<원문 인용>", "source_url": "<URL>", "weight": 12}
@@ -92,15 +92,17 @@ tags: [category, …]
 
 적재 전에 인용을 원문과 대조한다(공백을 정규화한 부분 문자열 일치).
 
-| 출처 | 대조 대상 |
+| 출처 (`source_url`) | 대조 대상 — URL 이 가리키는 가장 좁은 위치만 |
 |---|---|
 | `…/issues/<n>` · `…/pull/<n>` | `gh api repos/<r>/issues/<n>` 의 제목+본문 |
-| `…#issuecomment-<id>` | `gh api repos/<r>/issues/comments/<id>` 의 본문 |
-| `…/discussions/<n>`(`#discussioncomment-<id>`) | GraphQL `discussion(number)` 의 제목+본문+모든 댓글·답글(커서로 끝까지) |
+| `…/issues/<n>#issuecomment-<id>` | `gh api repos/<r>/issues/comments/<id>` 의 본문 |
+| `…/pull/<n>#discussion_r<id>`(PR 리뷰 댓글) | `gh api repos/<r>/pulls/comments/<id>` 의 본문 |
+| `…/discussions/<n>` | GraphQL `discussion(number)` 의 제목+본문 |
+| `…/discussions/<n>#discussioncomment-<id>` | 같은 토론의 댓글·답글을 커서로 끝까지 받아, `databaseId` 가 `<id>` 인 것의 본문 |
 | `…/blob/<ref>/<path>` | `.cache/repos/<owner>__<repo>/<path>` |
 | 그 밖 | 하나씩 열어 확인 |
 
-같은 단계에서 이메일(`[\w.+-]+@[\w-]+\.[\w.-]+`), 전화번호, 키 형태(`sk-…`·`gh[pousr]_…`·`AKIA…`·32자 이상 hex)의 인용을 뽑아, 버리거나 그 부분을 뺀 연속 구절로 줄인다. 불일치나 개인정보가 하나라도 남으면 적재하지 않는다.
+같은 단계에서 개인정보 **후보**를 뽑는다: 이메일(`[\w.+-]+@[\w-]+\.[A-Za-z]{2,}`), 전화번호(`0\d{1,2}-\d{3,4}-\d{4}`·`\+\d{1,3}[ -]?\d[\d -]{7,}`), 계좌번호(`\d{3,6}-\d{2,6}-\d{2,6}`·`\d{8}-\d{2}`), 키 형태(`sk-…`·`gh[pousr]_…`·`AKIA…`·32자 이상 hex). 후보는 사람이 본다. 패키지 `이름@버전`·커밋 sha·날짜처럼 개인정보가 아닌 것은 그대로 두고, 실제 개인정보면 그 줄을 버리거나 그 부분을 뺀 연속 구절로 줄인다. 불일치나 개인정보가 하나라도 남으면 적재하지 않는다. 대조 때문에 신호 파일을 고쳤으면 노트의 `신호 N개` 도 새 줄 수로 고친다.
 
 그다음 레포 루트에서 파라미터 바인딩으로 적재한다. 같은 인용은 다시 넣어도 중복되지 않는다. 출력의 `파일`·`신규` 가 다르면 줄 사이에 중복이 있거나(같은 URL·인용인데 kind 만 다른 줄 등) 이미 적재된 줄이 있는 것이다. 그 줄을 확인한다.
 
@@ -113,16 +115,21 @@ db, topic, entity_id, path = sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.arg
 if not Path(db).exists():
     sys.exit(f"DB 없음: {db} — 레포 루트에서 실행한다")
 conn = connect(db)
-# INSERT OR IGNORE 는 FK 위반도 조용히 건너뛰므로 entity 를 먼저 확인한다
+# 없는 entity_id 는 FK 오류로 멈추지만, 같은 (topic, source_url, quote) 행이 이미 있으면 IGNORE 가 먼저 적용돼
+# 오류 없이 건너뛴다. 그리고 UNIQUE 에 entity_id 가 없어서 잘못 넣은 행은 다시 적재해도 고쳐지지 않는다. 그래서 먼저 맞춰 본다
 key = conn.execute("SELECT key FROM entity WHERE id = ?", (entity_id,)).fetchone()
 if key is None:
     sys.exit(f"entity 없음: {entity_id}")
-print(key[0])  # 신호 파일 이름의 레포와 같은지 눈으로 확인한다
+if Path(path).stem != key[0].removeprefix("github:").replace("/", "__"):
+    sys.exit(f"entity {entity_id} 는 {key[0]} — 신호 파일 {Path(path).name} 과 다르다")
 lines = [json.loads(l) for l in open(path) if l.strip()]
+for s in lines:
+    if (s.get("kind") not in ("demand", "pain", "gap") or not str(s.get("quote") or "").strip()
+            or not str(s.get("source_url") or "").strip() or not isinstance(s.get("weight"), int)):
+        sys.exit(f"잘못된 줄: {s}")
 with conn:
     before = conn.total_changes
     for s in lines:
-        assert s["kind"] in ("demand", "pain", "gap") and s["quote"] and s["source_url"], s
         conn.execute("INSERT OR IGNORE INTO signal (topic, entity_id, kind, quote, source_url, weight, found_at) "
                      "VALUES (?, ?, ?, ?, ?, ?, ?)",
                      (topic, entity_id, s["kind"], s["quote"], s["source_url"], s["weight"], utc_now()))
@@ -132,7 +139,7 @@ print(f"파일 {len(lines)} · 신규 {new} · 레포 누적 {total}")
 EOF
 ```
 
-3. `topics/<주제>/log.md` 에 `## [YYYY-MM-DD] deep-dive | owner/repo` 를 추가한다. 이미 같은 줄이 있으면(재개) 넣지 않는다. 날짜는 `labbook` 의 자동 로그와 같은 UTC 기준이다(`python3 -c "from labbook.db import utc_today; print(utc_today())"`).
+3. `topics/<주제>/log.md` 에 `## [YYYY-MM-DD] deep-dive | owner/repo` 를 추가한다. `deep-dive | owner/repo` 로 끝나는 줄이 이미 있으면(재개, 날짜가 달라도) 넣지 않는다. 날짜는 `labbook` 의 자동 로그와 같은 UTC 기준이다(`python3 -c "from labbook.db import utc_today; print(utc_today())"`).
 4. 마지막으로 `topics/<주제>/index.md` 에 노트 한 줄 카탈로그 `- [owner/repo](notes/owner__repo.md) — 한 줄 요약` 을 추가한다. 이 줄이 완료 표시다.
 
 ## 여러 레포를 배치로 돌릴 때
