@@ -56,7 +56,6 @@ class MigrateTest(unittest.TestCase):
         self.assertEqual(self.conn.execute("SELECT COUNT(*) FROM schema_version").fetchone()[0], 0)
 
 
-
 class SetScreeningTest(unittest.TestCase):
     def setUp(self):
         self.conn = db.connect(":memory:")

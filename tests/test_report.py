@@ -134,7 +134,6 @@ class FunnelTest(Base):
         self.assertIn("심층분석 2", text)
 
 
-
 class SuspectsTest(Base):
     def included(self):
         return {r[0] for r in self.conn.execute(
@@ -172,6 +171,13 @@ class SuspectsTest(Base):
         self.seed.repo(2)
         self.assertEqual(report._suspects(self.conn, "t", self.included()), 0)
 
+    def test_플래그나_판정_증거가_빈_문자열이면_빈_값으로_본다(self):
+        eid = self.seed.repo(1)
+        self.conn.execute("UPDATE snapshot SET flags = '' WHERE entity_id = ?", (eid,))
+        self.conn.execute("INSERT INTO judgment (topic, entity_id, stage, rubric_version, model, evidence, judged_at) "
+                          "VALUES ('t', ?, 'triage', 'v1', 'm', '', 't')", (eid,))
+        self.assertEqual(report._suspects(self.conn, "t", self.included()), 0)
+
     def test_다른_토픽의_판정_증거는_세지_않는다(self):
         eid = self.seed.repo(1)
         self.conn.execute("INSERT INTO judgment (topic, entity_id, stage, rubric_version, model, evidence, judged_at) "
@@ -182,8 +188,10 @@ class SuspectsTest(Base):
         def statements():
             n, included = [], self.included()   # trace 를 켜기 전에 — _suspects 의 문장만 센다
             self.conn.set_trace_callback(n.append)
-            count = report._suspects(self.conn, "t", included)
-            self.conn.set_trace_callback(None)
+            try:
+                count = report._suspects(self.conn, "t", included)
+            finally:
+                self.conn.set_trace_callback(None)
             return len(n), count
 
         self.seed.repo(1, scores=(1, 1, 1, 1))
@@ -191,6 +199,7 @@ class SuspectsTest(Base):
         for i in range(2, 21):   # 3의 배수는 플래그, 5의 배수는 인젝션 — 15 는 둘 다
             self.seed.repo(i, scores=(1, 1, 1, 1), flags=("spike",) if i % 3 == 0 else (), injection=i % 5 == 0)
         self.assertEqual(statements(), (one, 9))   # 3·6·9·12·15·18 + 5·10·20
+
 
 if __name__ == "__main__":
     unittest.main()
