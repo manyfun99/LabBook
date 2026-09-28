@@ -28,8 +28,8 @@ class IdeaLoadTest(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.dir = Path(self.tmp.name)
 
-    def write(self, *rows, name="ideas.jsonl"):
-        path = self.dir / name
+    def write(self, *rows):
+        path = self.dir / "ideas.jsonl"
         path.write_text("".join(
             (r if isinstance(r, str) else json.dumps(r, ensure_ascii=False)) + "\n" for r in rows))
         return path
@@ -150,9 +150,11 @@ class IdeaLoadTest(unittest.TestCase):
         self.assertEqual([], self.rows())
 
     def test_signal_ids가_정수_배열이_아니면_거부한다(self):
-        for bad in ("7,8", [7, "8"], {"a": 1}):
-            with self.assertRaises(ValueError):
+        for bad in ("7,8", [7, "8"], {"a": 1}, [True]):  # True 는 int 서브클래스라 따로 막는다
+            with self.assertRaises(ValueError) as e:
                 idea.load(self.conn, "t", self.write({**DRAFT, "signal_ids": bad}))
+            self.assertIn("signal_ids", str(e.exception))
+        self.assertEqual([], self.rows())
 
     def test_scores가_객체도_null도_아니면_거부한다(self):
         with self.assertRaises(ValueError):
@@ -160,13 +162,37 @@ class IdeaLoadTest(unittest.TestCase):
         idea.load(self.conn, "t", self.write({**DRAFT, "scores": None}))
         self.assertIsNone(self.rows()[0]["scores"])
 
-    def test_다른_주제의_같은_제목은_별개_행이다(self):
+    def test_다른_주제의_같은_제목은_별개_행이고_건수도_주제별이다(self):
         conn = self.conn
         conn.execute("INSERT INTO signal (id, topic, entity_id, kind, quote, source_url, found_at) "
                      "VALUES (10, 'u', 5, 'demand', 'q', 'u4', 't')")
-        idea.load(conn, "t", self.write(DRAFT))
-        idea.load(conn, "u", self.write({**DRAFT, "signal_ids": [10]}))
+        self.assertEqual({"added": 1, "updated": 0, "total": 1}, idea.load(conn, "t", self.write(DRAFT)))
+        self.assertEqual({"added": 1, "updated": 0, "total": 1},
+                         idea.load(conn, "u", self.write({**DRAFT, "signal_ids": [10]})))
         self.assertEqual(2, len(self.rows()))
+
+    # 코드 리뷰 반영 — 갱신 줄에 바꿀 키가 하나도 없으면 SQL 이 깨진다
+    def test_갱신할_키가_없는_줄은_거부한다(self):
+        idea.load(self.conn, "t", self.write(DRAFT))
+        for row in ({"title": DRAFT["title"]}, {"title": DRAFT["title"], "note": "메모"}):
+            with self.assertRaises(ValueError) as e:
+                idea.load(self.conn, "t", self.write(row))
+            self.assertIn("갱신할 키가 없다", str(e.exception))
+        self.assertEqual("draft", self.rows()[0]["status"])
+
+    # 코드 리뷰 반영 — 디렉터리를 넘기면 IsADirectoryError 가 아니라 같은 메시지로 끝낸다
+    def test_경로가_디렉터리면_파일이_없다고_알린다(self):
+        with self.assertRaises(ValueError) as e:
+            idea.load(self.conn, "t", self.dir)
+        self.assertIn(str(self.dir), str(e.exception))
+
+    # 계획 §3.4 동작 3 — 검증은 DB 가 아니라 파일만 본다 (의도된 동작을 고정한다)
+    def test_상태를_바꾸는_줄은_reason을_같은_줄에_담아야_한다(self):
+        idea.load(self.conn, "t", self.write({**DRAFT, "status": "dropped", "reason": "중복: 대표"}))
+        with self.assertRaises(ValueError) as e:   # DB 에 reason 이 있어도 줄에 없으면 거부된다
+            idea.load(self.conn, "t", self.write({"title": DRAFT["title"], "status": "dropped"}))
+        self.assertIn("reason", str(e.exception))
+        self.assertEqual("중복: 대표", self.rows()[0]["reason"])
 
 
 if __name__ == "__main__":

@@ -11,7 +11,7 @@ JSON_COLS = ("signal_ids", "scores")
 
 def load(conn, topic, path):
     """파일 전체를 검증한 뒤 한 트랜잭션으로 쓴다 — 한 줄이라도 틀리면 아무것도 쓰지 않는다."""
-    if not path.exists():
+    if not path.is_file():
         raise ValueError(f"아이디어 파일이 없다: {path}")
     known = {r[0] for r in conn.execute("SELECT id FROM signal WHERE topic = ?", (topic,))}
     seen, rows = set(), []
@@ -58,6 +58,8 @@ def _check(where, row, known, is_new):
         for key in REQUIRED:
             if key not in row:
                 raise ValueError(f"{where} 새 아이디어에는 {key} 가 필요하다")
+    elif not any(c in row for c in COLS):
+        raise ValueError(f"{where} 갱신할 키가 없다 — {' · '.join(COLS)} 중 하나는 있어야 한다")
     if "status" in row and row["status"] not in STATUS:
         raise ValueError(f"{where} status 는 {' · '.join(STATUS)} 중 하나여야 한다: {row['status']!r}")
     if "signal_ids" in row:

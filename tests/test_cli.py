@@ -12,7 +12,7 @@ from tests.test_collect import CONFIG, FakeGitHub
 CONNECT = db.connect  # 패치 전 원본
 
 
-class CollectCommandTest(unittest.TestCase):
+class CliTestBase:  # TestCase 가 아니다 — 상속해도 부모 테스트가 다시 돌지 않게
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
@@ -35,6 +35,8 @@ class CollectCommandTest(unittest.TestCase):
             cli.main(["--db", str(self.root / "x.db"), *argv])
         return out.getvalue(), err.getvalue()
 
+
+class CollectCommandTest(CliTestBase, unittest.TestCase):
     def test_collect는_잘린_검색을_stderr에_경고하고_log에_남긴다(self):
         gh = FakeGitHub()
         gh.truncated = [("kw stars:100..199 created:2026-01-01..2026-12-31", 1400)]
@@ -48,7 +50,7 @@ class CollectCommandTest(unittest.TestCase):
         self.assertNotIn("잘린 검색", (self.topic_dir / "log.md").read_text())
 
 
-class IdeaLoadCommandTest(CollectCommandTest):
+class IdeaLoadCommandTest(CliTestBase, unittest.TestCase):
     def setUp(self):
         super().setUp()
         self.db_path = self.root / "x.db"
