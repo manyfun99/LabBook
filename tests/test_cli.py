@@ -48,5 +48,40 @@ class CollectCommandTest(unittest.TestCase):
         self.assertNotIn("잘린 검색", (self.topic_dir / "log.md").read_text())
 
 
+class IdeaLoadCommandTest(CollectCommandTest):
+    def setUp(self):
+        super().setUp()
+        self.db_path = self.root / "x.db"
+        conn = CONNECT(self.db_path)
+        self.addCleanup(conn.close)
+        db.migrate(conn)
+        conn.execute("INSERT INTO entity (id, kind, key, gh_id, url, first_seen_at) "
+                     "VALUES (5, 'github_repo', 'github:a/b', 1, 'u', 't')")
+        conn.execute("INSERT INTO signal (id, topic, entity_id, kind, quote, source_url, found_at) "
+                     "VALUES (7, 't', 5, 'demand', 'q', 'u', 't')")
+        conn.commit()
+
+    def write(self, *rows):
+        path = self.root / "ideas.jsonl"
+        path.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows))
+        return str(path)
+
+    def test_idea_load는_건수를_출력하고_log에_남긴다(self):
+        path = self.write({"title": "한국 공시 알림", "signal_ids": [7], "status": "draft"})
+        out, _ = self.run_main(FakeGitHub(), "idea-load", "t", path)
+        self.assertIn("추가 1 · 갱신 0 · 전체 1", out)
+        self.assertIn("idea-load | 추가 1 · 갱신 0 · 전체 1", (self.topic_dir / "log.md").read_text())
+
+    def test_적재할_것이_없으면_그렇게_알린다(self):
+        out, _ = self.run_main(FakeGitHub(), "idea-load", "t", self.write())
+        self.assertIn("적재할 아이디어 없음", out)
+
+    def test_검증_실패는_traceback_대신_메시지로_끝낸다(self):
+        path = self.write({"title": "x", "signal_ids": [7], "status": "drafts"})
+        with self.assertRaises(SystemExit) as e:
+            self.run_main(FakeGitHub(), "idea-load", "t", path)
+        self.assertIn("status", str(e.exception))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -4,7 +4,7 @@ import json
 import sys
 from pathlib import Path
 
-from labbook import archive, collect, db, judge, metrics, report
+from labbook import archive, collect, db, idea, judge, metrics, report
 from labbook.github import GitHub
 
 ROOT = Path(__file__).parent.parent
@@ -31,6 +31,9 @@ def main(argv=None):
     s.add_argument("topic")
     s.add_argument("--add", nargs="*", default=[], metavar="OWNER/REPO")
     s.add_argument("--confirm", action="store_true", help="후보를 deep 단계로 확정")
+    s = sub.add_parser("idea-load")
+    s.add_argument("topic")
+    s.add_argument("path", help="아이디어 JSONL 경로")
     sub.add_parser("export")
     sub.add_parser("import")
     args = p.parse_args(argv)
@@ -74,6 +77,13 @@ def main(argv=None):
     elif args.cmd == "top":
         _print_top(report.top(conn, args.topic, args.by, args.limit))
         return
+    elif args.cmd == "idea-load":
+        try:
+            out = idea.load(conn, args.topic, Path(args.path))
+        except ValueError as e:
+            sys.exit(str(e))
+        detail = (f"추가 {out['added']} · 갱신 {out['updated']} · 전체 {out['total']}"
+                  if out["added"] or out["updated"] else "적재할 아이디어 없음")
     elif args.cmd == "select":
         try:
             picks = report.select(conn, args.topic, add=args.add, confirm=args.confirm)
