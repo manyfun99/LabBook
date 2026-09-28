@@ -23,3 +23,17 @@
 - [dragon1086/prism-insight](notes/dragon1086__prism-insight.md) — 1인 개발자가 1년째 운영하는 무료 한국·미국 AI 급등주 분석·가상매매 텔레그램 시스템. 포워드 기록은 공개하지만 헤드라인 수익률은 비용 없는 단순합이라 KOSPI 에 지고, 봉인 리더보드 Stance 가 차용할 핵심이다
 - [hkuds/vibe-trading](notes/hkuds__vibe-trading.md) — HKUDS 의 자연어→백테스트 개인 트레이딩 에이전트. 수치 grounding gate·시장별 비용 엔진(KRX 포함)·18개 증권사 커넥터(KIS·토스·업비트)를 갖췄지만 LLM 기억 누출 경고는 아직 없다
 - [chrisryugj/korean-dart-mcp](notes/chrisryugj__korean-dart-mcp.md) — OpenDART 를 18개 MCP 도구로 묶은 TypeScript 서버. XBRL 합산 검증·HWP/PDF 첨부 마크다운화·규칙 기반 내부자·회계 리스크 시그널을 주지만 stdio pull 조회라 푸시 알림·무설치 호스팅이 비어 있다
+
+## 아이템 원페이저
+
+- [AI 주식 오픈소스 실사 보고서 + 성과 주장 감사](ideas/oss-duediligence-report.md) — 429개 판정·노트 19개를 한국 지원·실제 비용·성과 주장 신뢰도 3열로 정리한 평가형 카탈로그. 추가 조사비 0, 약점은 노후화와 수익화 (27점)
+- [한국 AI·리딩 채널 봉인 성적표](ideas/sealed-scorecard-kr.md) — 한국어 AI 종목 채널의 신호를 받은 시각에 서버가 봉인하고 거래세·슬리피지 반영해 채점. 채널 1,226개·구독 월 3천~6만원이 시장이고, 약점은 표본 확보와 저작권 (26점)
+- [대가 공시 속보·13F 파생 한국어 확장](ideas/guru-filing-newsflash.md) — GuruNote 워커·봇·13F DB 에 Form 4·13D/G 속보와 8-K 한국어 요약·시트 내려받기를 얹는다. 실현성·재사용 만점, 약점은 수익화와 본체 검증 미완료 (26점)
+- [한국어 설치 생존 가이드 + 지표 카드](ideas/install-survival-guide-kr.md) — 상위 도구의 한국어 설치 문서와 "이 오류 → 이 해결" 사전. 근거가 가장 넓고(13레포·w186) 원재료가 신호 DB 에 있다. 약점은 경시성과 과금 경로 (25점)
+- [DART 공시 조건 알림 봇](ideas/dart-alert-bot.md) — 종목·공시유형 조건을 걸어 두면 접수 직후 텔레그램으로 사실 요약이 온다. DIY 봇은 이미 여럿이고 비어 있는 건 비개발자용 호스팅판이다 (25점)
+- [관리형 LLM 종목 리포트](ideas/managed-llm-report.md) — 키 설정·토큰 비용 없이 종목만 넣으면 리포트를 받는다. 수익화 만점(go-stock VIP 월 28.8 RMB)이지만 유사투자자문 신고가 필요하고 구독 한도가 곧 용량 상한이다 (24점)
+- [거래내역 성과 리포트 — 업로드형](ideas/trade-history-tearsheet.md) — 증권사 거래내역 CSV 로 승률·손익 분포·벤치마크 대비를 계산한다. LLM 이 필요 없고, 리밸런싱 제안은 등록업이라 넣지 않는다 (24점)
+
+## 도구
+
+- [개인 투자 툴킷](toolkit.md) — P≥4 인 12개 + worldmonitor 의 용도·실행법·신뢰 주의점. AI 신호를 다루는 규칙과 쓰지 않기로 한 6개의 사유를 함께 담았다
