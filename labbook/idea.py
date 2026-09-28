@@ -11,11 +11,13 @@ JSON_COLS = ("signal_ids", "scores")
 
 def load(conn, topic, path):
     """파일 전체를 검증한 뒤 한 트랜잭션으로 쓴다 — 한 줄이라도 틀리면 아무것도 쓰지 않는다."""
-    if not path.is_file():
-        raise ValueError(f"아이디어 파일이 없다: {path}")
+    try:
+        text = path.read_text()
+    except OSError as e:   # 없음·디렉터리·권한 — 사용자 대면 메시지로 끝낸다
+        raise ValueError(f"아이디어 파일을 읽을 수 없다: {path} — {e.strerror or e}") from None
     known = {r[0] for r in conn.execute("SELECT id FROM signal WHERE topic = ?", (topic,))}
     seen, rows = set(), []
-    for n, line in enumerate(path.read_text().splitlines(), 1):
+    for n, line in enumerate(text.splitlines(), 1):
         if not line.strip():
             continue
         where = f"{path}:{n}"

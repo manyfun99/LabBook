@@ -113,13 +113,6 @@ class IdeaLoadTest(unittest.TestCase):
         self.assertEqual({"added": 0, "updated": 0, "total": 0},
                          idea.load(self.conn, "t", self.write("", "   ")))
 
-    # 8
-    def test_파일이_없으면_경로를_담은_에러를_낸다(self):
-        missing = self.dir / "없다.jsonl"
-        with self.assertRaises(ValueError) as e:
-            idea.load(self.conn, "t", missing)
-        self.assertIn(str(missing), str(e.exception))
-
     # 9
     def test_작은따옴표와_개행이_든_값이_그대로_들어간다(self):
         quirky = {**DRAFT, "jtbd": "'따옴표' 와\n개행이 든 문장", "status": "dropped",
@@ -180,11 +173,15 @@ class IdeaLoadTest(unittest.TestCase):
             self.assertIn("갱신할 키가 없다", str(e.exception))
         self.assertEqual("draft", self.rows()[0]["status"])
 
-    # 코드 리뷰 반영 — 디렉터리를 넘기면 IsADirectoryError 가 아니라 같은 메시지로 끝낸다
-    def test_경로가_디렉터리면_파일이_없다고_알린다(self):
-        with self.assertRaises(ValueError) as e:
-            idea.load(self.conn, "t", self.dir)
-        self.assertIn(str(self.dir), str(e.exception))
+    # 코드 리뷰 반영 — 디렉터리·권한 오류가 traceback 으로 새지 않는다
+    def test_읽을_수_없는_경로는_ValueError로_끝낸다(self):
+        blocked = self.write(DRAFT)
+        blocked.chmod(0o000)
+        self.addCleanup(blocked.chmod, 0o600)
+        for bad in (self.dir, self.dir / "없다.jsonl", blocked):
+            with self.assertRaises(ValueError) as e:
+                idea.load(self.conn, "t", bad)
+            self.assertIn(str(bad), str(e.exception))
 
     # 계획 §3.4 동작 3 — 검증은 DB 가 아니라 파일만 본다 (의도된 동작을 고정한다)
     def test_상태를_바꾸는_줄은_reason을_같은_줄에_담아야_한다(self):
