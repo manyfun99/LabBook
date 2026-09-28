@@ -20,3 +20,25 @@
 ## [2026-09-27] judge | 처리 38
 ## [2026-09-27] judge | 처리 3
 ## [2026-09-27] judge | 처리 3
+## [2026-09-27] select | 심층분석 19개 확정
+## [2026-09-27] select-review | 그대로 확정 · add koala73/worldmonitor, dragon1086/prism-insight, hkuds/vibe-trading, chrisryugj/korean-dart-mcp (사용자 선택)
+## [2026-09-27] funnel | reports/funnel-2026-09-27.md
+## [2026-09-27] deep-dive | openbb-finance/openbb
+## [2026-09-27] deep-dive | ranaroussi/yfinance
+## [2026-09-27] deep-dive | ranaroussi/quantstats
+## [2026-09-27] deep-dive | shashankvemuri/finance
+## [2026-09-27] deep-dive | dgunning/edgartools
+## [2026-09-27] deep-dive | arvinlovegood/go-stock
+## [2026-09-27] deep-dive | mathieu2301/tradingview-api
+## [2026-09-27] deep-dive | virattt/ai-hedge-fund
+## [2026-09-27] deep-dive | valuecell-ai/valuecell
+## [2026-09-27] deep-dive | wbh604/uzi-skill
+## [2026-09-27] deep-dive | tauricresearch/tradingagents
+## [2026-09-27] deep-dive | open-dev-society/openstock
+## [2026-09-27] deep-dive | 666ghj/mirofish
+## [2026-09-27] deep-dive | financedata/financedatareader
+## [2026-09-27] deep-dive | financedata/opendartreader
+## [2026-09-27] deep-dive | koala73/worldmonitor
+## [2026-09-27] deep-dive | dragon1086/prism-insight
+## [2026-09-27] deep-dive | hkuds/vibe-trading
+## [2026-09-27] deep-dive | chrisryugj/korean-dart-mcp
