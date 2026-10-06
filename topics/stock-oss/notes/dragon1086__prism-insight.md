@@ -5,7 +5,7 @@ judged: 2026-09-27  rubric: v1
 t_deep: 4
 tags: [llm-agent, multi-agent, korea, us, telegram, kis-auto-trading, forward-record, stance-leaderboard, dart, agpl-dual-license, mobile-app]
 ---
-> 갱신 (2026-10-06): README 가 2026-10-05 KST 개편(a4d235f)으로 +244.63% 헤드라인을 내렸다. 지금은 한국 시즌 2(2025-09-30~2026-10-02, 청산 211건)의 거래별 단순합 +355.3% 와 10슬롯 계좌 수익률 +35.2% 를 나란히 싣고, 같은 기간 KOSPI +103.5% 에 뒤졌다고 스스로 밝힌다(대시보드 JSON 재계산 일치). 10슬롯 값은 "청산한 거래만 포함하며 복리가 아닙니다"(README_ko). 비용 반영 여부는 README 에 없다. 같은 개편에서 "KRX credentials (Kakao account)" 안내도 KIS API 키 안내로 바뀌었고, "API 키 없어도 됩니다"라며 ChatGPT Plus($20/월) Codex OAuth 경로를 맨 앞에 둔다. 아래 본문은 2026-09-28 기준이다.
+> 갱신 (2026-10-06): README 가 2026-10-05 KST 개편(a4d235f)으로 +244.63% 헤드라인을 내렸다. 지금은 한국 시즌 2(2025-09-30~2026-10-02, 청산 211건)의 거래별 단순합 +355.3% 와 10슬롯 계좌 수익률 +35.2% 를 나란히 싣고, 같은 기간 KOSPI +103.5% 에 뒤졌다고 스스로 밝힌다(대시보드 JSON 재계산 일치). 10슬롯 값은 "청산한 거래만 포함하며 복리가 아닙니다"(README_ko). 비용 반영 여부는 README 에 없다. 같은 개편에서 "KRX credentials (Kakao account)" 안내가 KIS API 키 안내로 바뀌었고, 후원 절의 운영비가 월 약 $310 에서 $313(OpenAI $234·Anthropic $11·Firecrawl+Perplexity $36·서버 $32, 2026-01)으로 바뀌었다. 아래의 "문서와 코드가 어긋난다"·"운영비는 README 기준 월 약 $310" 서술은 2026-09-28 기준이다.
 
 ## 무엇·어떻게
 
