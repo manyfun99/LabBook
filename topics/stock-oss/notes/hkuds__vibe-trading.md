@@ -5,6 +5,8 @@ judged: 2026-09-27  rubric: v1
 t_deep: 4
 tags: [llm-agent, multi-agent-swarm, backtest, alpha-zoo, grounding-gate, mcp, broker-connectors, multi-market, korea, mit]
 ---
+> 갱신 (2026-10-06): PR #1618(2026-10-01 머지)로 백테스트 run card 가 `model_training_cutoff` 를 기록하고, 컷오프 이전에 끝나는 구간을 노출 가능으로 표시한다(미설정은 노출로 간주). 아래 "기억 누출 경고 없음" 서술은 2026-09-28 기준이다.
+
 ## 무엇·어떻게
 
 홍콩대 데이터 인텔리전스 랩(HKUDS)이 만든 "개인 트레이딩 에이전트"다. 자연어 요청을 데이터 조회 → 전략 코드 생성 → 백테스트 → 보고서로 잇는다. clone HEAD `0244eceaaf8d9e8ae79e2355836802acae3d1fc2`(2026-09-27, v0.1.15 이후), MIT, 2026-04-01 생성, ★3.41만·포크 5,556·watcher 181. PyPI `vibe-trading-ai` 로 배포한다. 6개월 동안 PR 1,157개·이슈 423개가 쌓였다. 릴리스 노트 한 번에 커밋 수백 개가 들어갈 만큼 개발 속도가 빠르다(v0.1.15 "551 commits and 162 merged pull requests"). README 는 7개 언어이고 영어판만 33만 자다. 그 가운데 News 절이 230줄을 차지한다.
