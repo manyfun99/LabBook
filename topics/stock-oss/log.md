@@ -42,3 +42,6 @@
 ## [2026-09-27] deep-dive | dragon1086/prism-insight
 ## [2026-09-27] deep-dive | hkuds/vibe-trading
 ## [2026-09-27] deep-dive | chrisryugj/korean-dart-mcp
+## [2026-09-28] idea-load | 추가 70 · 갱신 0 · 전체 70
+## [2026-09-28] idea-load | 추가 0 · 갱신 7 · 전체 70
+## [2026-09-28] brainstorm | JTBD 12 → 렌즈 7개 발산 54 → 대표 18 → 원페이저 7 · toolkit.md
