@@ -5,7 +5,7 @@ judged: 2026-09-27  rubric: v1
 t_deep: 4
 tags: [llm-agent, multi-agent-swarm, backtest, alpha-zoo, grounding-gate, mcp, broker-connectors, multi-market, korea, mit]
 ---
-> 갱신 (2026-10-06): PR #1618(2026-10-01 머지)로 백테스트 run card 가 `model_training_cutoff` 를 기록하고, 컷오프 이전에 끝나는 구간을 노출 가능으로 표시한다(미설정은 노출로 간주). 아래 "기억 누출 경고 없음" 서술은 2026-09-28 기준이다.
+> 갱신 (2026-10-06): PR #1618(2026-10-01 머지)로 백테스트 run card 가 `model_training_cutoff` 를 기록하고, 컷오프 이전에 끝나는 구간을 노출 가능으로 표시한다(미설정은 노출로 간주). PR 본문대로 "Cutoff values remain user-provided" — 모델별 컷오프를 알아서 넣지 않으므로 사용자가 날짜를 넣어야 의미가 있다. 아래의 "기억 누출 경고가 아직 없다"·"경고 기능은 아직 없음" 서술은 2026-09-28 기준이다.
 
 ## 무엇·어떻게
 

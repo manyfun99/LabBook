@@ -20,8 +20,8 @@
 - [financedata/financedatareader](notes/financedata__financedatareader.md) — KRX·네이버·Yahoo·FRED 를 한 API 로 묶은 한국 개인 퀀트의 표준 무료 데이터 크롤러. KRX 로그인 필수화 뒤 메인테이너 계정 기반 GitHub 캐시로 버티며 90일 비밀번호 주기마다 끊기는 단일 장애점이 드러났다
 - [financedata/opendartreader](notes/financedata__opendartreader.md) — 금감원 Open DART 를 pandas DataFrame 과 dart CLI 로 감싼 무료 MIT 래퍼. 고유번호 변환·주요사항·지분공시는 바로 쓸 수 있지만 재무 표준화·본문 검색·실적 알림은 공백이다
 - [koala73/worldmonitor](notes/koala73__worldmonitor.md) — 지정학·거시·시장을 한 화면에 모은 AGPL open-core OSINT 대시보드. 금융 변형은 거시·시장 리서치에 쓸 만하지만 한국 데이터가 거의 없고, 유료 AI 종목 분석·백테스트는 6개월 기술 신호 재생이라 검증이 얇다
-- [dragon1086/prism-insight](notes/dragon1086__prism-insight.md) — 1인 개발자가 1년째 운영하는 무료 한국·미국 AI 급등주 분석·가상매매 텔레그램 시스템. 포워드 기록은 공개하지만 헤드라인 수익률은 비용 없는 단순합이라 KOSPI 에 지고, 봉인 리더보드 Stance 가 차용할 핵심이다 (갱신 2026-10-06: README 헤드라인을 10슬롯 +35.2% vs KOSPI +103.5% 로 고쳤다)
-- [hkuds/vibe-trading](notes/hkuds__vibe-trading.md) — HKUDS 의 자연어→백테스트 개인 트레이딩 에이전트. 수치 grounding gate·시장별 비용 엔진(KRX 포함)·18개 증권사 커넥터(KIS·토스·업비트)를 갖췄지만 LLM 기억 누출 경고는 아직 없다 (갱신 2026-10-06: 컷오프 노출 경고 추가, PR #1618)
+- [dragon1086/prism-insight](notes/dragon1086__prism-insight.md) — 1인 개발자가 2025-03 부터 운영해 온 무료 한국·미국 AI 급등주 분석·가상매매 텔레그램 시스템. 포워드 기록은 공개하지만 헤드라인 수익률은 비용 없는 단순합이라 KOSPI 에 지고, 봉인 리더보드 Stance 가 차용할 핵심이다 (갱신 2026-10-06: README 가 단순합과 10슬롯 +35.2% 를 나란히 싣고 KOSPI +103.5% 에 뒤졌다고 밝혔다)
+- [hkuds/vibe-trading](notes/hkuds__vibe-trading.md) — HKUDS 의 자연어→백테스트 개인 트레이딩 에이전트. 수치 grounding gate·시장별 비용 엔진(KRX 포함)·18개 증권사 커넥터(KIS·토스·업비트)를 갖췄다. LLM 기억 누출 경고는 2026-10-01 에 들어왔지만 컷오프 날짜는 사용자가 넣는다(PR #1618)
 - [chrisryugj/korean-dart-mcp](notes/chrisryugj__korean-dart-mcp.md) — OpenDART 를 18개 MCP 도구로 묶은 TypeScript 서버. XBRL 합산 검증·HWP/PDF 첨부 마크다운화·규칙 기반 내부자·회계 리스크 시그널을 주지만 stdio pull 조회라 푸시 알림·무설치 호스팅이 비어 있다
 
 ## 아이템 원페이저
