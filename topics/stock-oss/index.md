@@ -37,3 +37,7 @@
 ## 도구
 
 - [개인 투자 툴킷](toolkit.md) — P≥4 인 12개 + worldmonitor 의 용도·실행법·신뢰 주의점. AI 신호를 다루는 규칙과 쓰지 않기로 한 6개의 사유를 함께 담았다
+
+## 게시글
+
+- [실사 보고서 1편 — 성과 주장을 거르는 5가지 질문](posts/duediligence-01.md) — 감사 5항목(단순합·비용·벤치마크·컷오프·표본)과 AI 도구 5개(TradingAgents·MiroFish·ai-hedge-fund·Vibe-Trading·PRISM-INSIGHT) 채점표. 원페이저 `oss-duediligence-report` 의 검증 글이고 클리앙판은 `posts/duediligence-01.clien.txt` (기준일 2026-10-06)
