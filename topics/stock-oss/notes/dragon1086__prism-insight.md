@@ -5,6 +5,8 @@ judged: 2026-09-27  rubric: v1
 t_deep: 4
 tags: [llm-agent, multi-agent, korea, us, telegram, kis-auto-trading, forward-record, stance-leaderboard, dart, agpl-dual-license, mobile-app]
 ---
+> 갱신 (2026-10-06): README 가 2026-10-05 KST 개편(a4d235f)으로 +244.63% 헤드라인을 내렸다. 지금은 한국 시즌 2(2025-09-30~2026-10-02, 청산 211건)의 거래별 단순합 +355.3% 와 10슬롯 계좌 수익률 +35.2% 를 나란히 싣고, 같은 기간 KOSPI +103.5% 에 뒤졌다고 스스로 밝힌다(대시보드 JSON 재계산 일치). 10슬롯 값은 "청산한 거래만 포함하며 복리가 아닙니다"(README_ko). 비용 반영 여부는 README 에 없다. 같은 개편에서 "KRX credentials (Kakao account)" 안내가 KIS API 키 안내로 바뀌었고, 후원 절의 운영비가 월 약 $310 에서 $313(OpenAI $234·Anthropic $11·Firecrawl+Perplexity $36·서버 $32, 2026-01)으로 바뀌었다. 아래의 "문서와 코드가 어긋난다"·"운영비는 README 기준 월 약 $310" 서술은 2026-09-28 기준이다.
+
 ## 무엇·어떻게
 
 한국(KOSPI/KOSDAQ)과 미국 주식을 대상으로 급등주를 찾아 분석하고 매매까지 하는 멀티에이전트 시스템이다. 개인 개발자 dragon1086 이 2025-03 부터 텔레그램 채널로 운영하던 것을 2025-08 에 공개했다. clone HEAD `2a8cf7f4e66479b82e65822269aa19d8f2b09a91`(2026-09-28, v2.23 대), 라이선스는 AGPL-3.0 과 상용 라이선스의 이중 라이선스다. ★768·포크 262·watchers 9. 이슈는 45개뿐이고 대부분 메인테이너가 스스로 올린 작업 메모다. 반면 `docs/` 에는 2026-09 날짜의 설계·사고 경위 문서가 100개 넘게 쌓여 있다. 코드는 매일 바뀌고, CLAUDE.md 에 따르면 약 26.5만 LOC 규모다. 스타 규모에 비해 코드와 운영이 대단히 크다.

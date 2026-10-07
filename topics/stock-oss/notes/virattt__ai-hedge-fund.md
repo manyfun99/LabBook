@@ -5,6 +5,8 @@ judged: 2026-09-27  rubric: v1
 t_deep: 4
 tags: [llm-agent, persona-agent, backtest, point-in-time, tui, vendor-funnel, mit]
 ---
+> 갱신 (2026-10-06): 2026-10-02 KST 커밋 5c4c54a("Add new mode" — `hedge_fund/paper/` 원장·브로커, TUI 페이퍼 화면, `aihf paper` CLI, README)로 페이퍼 트레이딩 모드가 생겼고, 6ddac1e 가 TUI·README 를 다듬었다. 세션마다 `~/.hedge-fund/paper/<name>/` 의 해시체인 원장에 쌓인다. 아래의 "페이퍼·실매매는 계획"·"포워드·페이퍼 기록: 없다"·"실매매·페이퍼 기능이 없다" 서술은 2026-09-28 기준이다.
+
 ## 무엇·어떻게
 
 투자 대가 페르소나 LLM 에이전트와 퀀트 모델을 "펀드" 조직도(전략 pod → 포트폴리오 구성 → 리스크 → 체결 → 원장)로 엮은 교육용 AI 헤지펀드다. clone HEAD `5d2c7ca2d02c6501692a58bb363dfab1916890ba`, 패키지 `aihf` 2.4.1, MIT, ★63.7k·포크 1.1만. 2024-11 에 만들어졌고 마지막 push 는 2026-09-26 이다.

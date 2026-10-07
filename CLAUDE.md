@@ -11,7 +11,7 @@
 |------|------|
 | `docs/ai-discussions/` | 계획·결정 기록 |
 | `labbook/` | 수집·판정 도구 (Python 표준 라이브러리). `python3 -m labbook <명령>` — collect·refresh·triage·judge·funnel·top·select·export·import. 스키마는 `labbook/migrations/` |
-| `topics/<주제>/` | 주제별 설정(`config.json`)·루브릭·골드셋·노트·아이디어·리포트·`index.md`·`log.md` |
+| `topics/<주제>/` | 주제별 설정(`config.json`)·루브릭·골드셋·노트·아이디어·리포트·게시글(`posts/`)·`index.md`·`log.md` |
 | `data/*.jsonl` | 조사 기록 이력 정본 (git 커밋). 작업 DB `labbook.db` 는 gitignore — `python3 -m labbook import` 로 재구성 |
 | `.claude/skills/labbook-*` | 이 레포의 조사 스킬 (심층분석·브레인스토밍·기록 조회) — 하네스(plan-*)와 별개로 이 레포에서 수정한다 |
 
